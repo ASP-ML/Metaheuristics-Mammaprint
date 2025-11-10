@@ -127,11 +127,11 @@ if __name__ == "__main__":
     
     STEPS_EXPERIMENT = 1
     START_GEN = 0
-    END_GEN = 20
+    END_GEN = 100
     STEP_GEN = 10
     NUMBER_EXECUTORS = 4
     METAS_EXPERIMENT = ['GA', 'SA', 'DE']
-    OBJECTIVE_FUNCTIONS = ['relieff']
+    OBJECTIVE_FUNCTIONS = ['relieff', 'mi', 'sim_uncertainty', 'gain_ratio', 'information_gain', 'chi2']
     columns=['Meta', 'OF', 'IT','Subset', 'Length', 'Settings','Classifier', 'ACC_MEAN', 'ACC_DESV', 'PRE_MEAN', 'PRE_DESV', 'MSE_MEAN', 'MSE_DESV', 'REC_MEAN', 'REC_DESV', 'AUC_MEAN', 'AUC_DESV', 'F1_MEAN', 'F1_DESV', 'MCC_MEAN','MCC_DESV']
     R_K_TIMES = 1
     _date = "25_03_2024"
