@@ -1,3 +1,50 @@
+"""
+Gray Wolf Optimizer (GWO) for Feature Selection
+===============================================
+
+This module implements the Gray Wolf Optimizer algorithm adapted for feature
+selection in the Mammaprint cancer classification project.
+
+GWO is inspired by the social hierarchy and hunting behavior of gray wolves,
+using alpha, beta, and delta wolves to guide the search process.
+
+Algorithm Overview:
+------------------
+1. Initialize random wolf pack positions (feature subsets)
+2. Identify three best wolves (alpha, beta, delta)
+3. For each iteration:
+   a. Update positions of all wolves based on leaders
+   b. Adjust exploration/exploitation via coefficient a
+   c. Evaluate fitness and update alpha, beta, delta
+4. Return alpha wolf's position as best feature subset
+
+Key Features:
+------------
+- Hierarchical leadership structure (alpha, beta, delta, omega)
+- Adaptive exploration/exploitation balance
+- Continuous to binary conversion via sigmoid/threshold
+- Boundary handling for invalid positions
+- Linear decay of coefficient a from 2 to 0
+
+Mathematical Foundation:
+-----------------------
+Position update equation:
+X(t+1) = X_p(t) - A · D
+where D = |C · X_p(t) - X(t)|
+A = 2a · r1 - a
+C = 2 · r2
+a: linearly decreases from 2 to 0
+
+References:
+----------
+Mirjalili, S., Mirjalili, S. M., & Lewis, A. (2014). Grey wolf optimizer.
+Advances in engineering software, 69, 46-61.
+
+Author: ASP-ML Team
+License: MIT
+Version: 1.0.0
+"""
+
 import numpy as np
 import random
 import time
@@ -5,14 +52,53 @@ from .base import Metaheuristic
 
 
 class GrayWolfAlgorithm(Metaheuristic): 
-    """Gray Wolf Algorithm"""
+    """
+    Gray Wolf Optimizer for binary feature selection.
+    
+    Implements GWO with hierarchical wolf pack structure adapted for
+    discrete feature selection problems.
+    
+    Attributes:
+    ----------
+    search_agents : int
+        Number of wolves in the pack (population size)
+    dim : int
+        Dimensionality (number of features)
+    lb : float or list
+        Lower bound(s) for feature values (0 for binary)
+    ub : float or list
+        Upper bound(s) for feature values (1 for binary)
+    fitnessFunction : callable
+        Objective function to evaluate feature subsets
+    epochs : int
+        Maximum number of iterations
+    """
     def __init__(self, data, labels, search_agents, max_iter, fitnessFunction):
+        """
+        Initialize Gray Wolf Optimizer for feature selection.
+        
+        Parameters:
+        ----------
+        data : pd.DataFrame or np.ndarray
+            Feature matrix without target labels
+        labels : pd.Series or np.ndarray
+            Target class labels
+        search_agents : int
+            Number of wolves in the pack (typically 5-30)
+        max_iter : int
+            Maximum number of iterations
+        fitnessFunction : callable
+            Function to evaluate feature subset quality
+        
+        Notes:
+        -----
+        - Larger pack size improves exploration but increases computation
+        - Alpha wolf represents best solution found
+        - Beta and delta wolves guide search towards promising regions
+        - Coefficient 'a' linearly decreases to balance exploration/exploitation
+        """
         Metaheuristic.__init__(self)
-        """ :param data: dataset without labels
-            :param labels: dataset labels
-            :param search_agents: the number of wolfs for search the best objetive value
-            :param max_iter: max iterations
-            :param fitnessFunction: the objective function to optimize"""
+
         self.lb = 0
         self.ub = data.shape[1]
         self.dim = data.shape[1]

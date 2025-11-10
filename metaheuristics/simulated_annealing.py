@@ -1,3 +1,60 @@
+"""
+Simulated Annealing (SA) for Feature Selection
+==============================================
+
+This module implements the Simulated Annealing metaheuristic algorithm
+adapted for binary feature selection in the Mammaprint project.
+
+Simulated Annealing is inspired by the annealing process in metallurgy,
+where controlled cooling allows atoms to reach low-energy states.
+
+Algorithm Overview:
+------------------
+1. Initialize with random feature subset and high temperature
+2. For each iteration:
+   a. Generate neighbor solution via perturbation (flip random bits)
+   b. Evaluate fitness of neighbor
+   c. Accept neighbor if better, or probabilistically if worse
+   d. Reduce temperature according to cooling schedule
+3. Return best solution found during search
+
+Key Features:
+------------
+- Temperature-based acceptance probability
+- Metropolis acceptance criterion for escaping local optima
+- Geometric cooling schedule: T(t+1) = α · T(t)
+- Multiple perturbation strategies (single-bit, multi-bit flip)
+- JVM reload handling for Weka objective functions
+- Minimum subset length enforcement
+
+Mathematical Foundation:
+-----------------------
+Acceptance probability:
+P(accept) = exp(-ΔE / (β·T))
+
+where:
+- ΔE: fitness difference (current - neighbor)
+- T: current temperature
+- β: Boltzmann-like constant controlling acceptance sensitivity
+
+Cooling schedule:
+T(t) = T₀ · α^t
+
+where:
+- T₀: initial temperature
+- α: cooling rate (typically 0.85-0.99)
+- t: iteration number
+
+References:
+----------
+Kirkpatrick, S., Gelatt, C. D., & Vecchi, M. P. (1983). Optimization by
+simulated annealing. Science, 220(4598), 671-680.
+
+Author: ASP-ML Team
+License: MIT
+Version: 1.0.0
+"""
+
 import numpy as np
 import logging
 import weka.core.jvm as jvm
@@ -5,15 +62,69 @@ from .base import Metaheuristic, writterHistoric, MAX_ITERATIONS_JVM_WEKA, SET_M
 
 
 class SimulatedAnnealing(Metaheuristic):
-    """Simulated Annealing Algorithm"""
+    """
+    Simulated Annealing for binary feature selection optimization.
+    
+    Single-solution metaheuristic that explores the search space via
+    controlled random perturbations with temperature-based acceptance.
+    
+    Attributes:
+    ----------
+    initTemp : float
+        Initial temperature T₀ (higher = more exploration)
+    epochs : int
+        Maximum number of iterations
+    nFeatures : int
+        Total number of features
+    alpha : float
+        Cooling rate (0 < α < 1, typically 0.85-0.99)
+    beta : float
+        Boltzmann constant for acceptance probability
+    objectiveFunction : callable
+        Fitness evaluation function
+    bestSubset : np.ndarray
+        Best feature subset found
+    bestFitValue : float
+        Fitness of best subset
+    """
     def __init__(self, experiment_index, data, labels, initTemp, iterations, nFeatures, beta, alpha, objectiveFunction, type_of, indexes, path_historic):
-        """:param data: dataset
-           :param labels: dataset labels
-           :param initTemp: init temp of metal bar
-           :param iterations: number of generations to repeat the algorithm
-           :param nFeatures: the number of features to consider in the algorithm
-           :param beta: is used for acceptance probability
-           :param alpha: is used for the reduction of temperature"""
+        """
+        Initialize Simulated Annealing for feature selection.
+        
+        Parameters:
+        ----------
+        experiment_index : int
+            Unique identifier for experimental run
+        data : pd.DataFrame or np.ndarray
+            Feature matrix without target variable
+        labels : pd.Series or np.ndarray
+            Target class labels
+        initTemp : float
+            Initial temperature (higher = more exploration, typical: 100-1000)
+        iterations : int
+            Maximum number of cooling iterations
+        nFeatures : int
+            Total number of features available
+        beta : float
+            Boltzmann constant affecting acceptance probability (typical: 1-10)
+        alpha : float
+            Cooling rate for geometric schedule (0.85-0.99, higher = slower cooling)
+        objectiveFunction : callable
+            Function to evaluate feature subset quality
+        type_of : str
+            Objective function identifier
+        indexes : array-like
+            Feature indices mapping to original dataset
+        path_historic : str
+            CSV file path for logging optimization history
+        
+        Notes:
+        -----
+        - Higher initTemp allows more exploration in early iterations
+        - Higher alpha (closer to 1) means slower cooling and longer search
+        - Lower beta increases acceptance probability for worse solutions
+        - Balance these parameters based on problem difficulty
+        """
         Metaheuristic.__init__(self)
         self.initTemp = initTemp
         self.epochs = iterations

@@ -1,3 +1,44 @@
+"""
+Genetic Algorithm (GA) Metaheuristic for Feature Selection
+==========================================================
+
+This module implements a Genetic Algorithm specifically designed for feature
+selection tasks in the Mammaprint cancer classification project.
+
+Genetic Algorithms are population-based evolutionary algorithms that mimic
+natural selection through selection, crossover, and mutation operators.
+
+Algorithm Overview:
+------------------
+1. Initialize random population of binary chromosomes (feature subsets)
+2. For each generation:
+   a. Evaluate fitness of all individuals
+   b. Select best parents using tournament selection
+   c. Create offspring through crossover
+   d. Apply mutation to introduce diversity
+   e. Form new population from parents and offspring
+3. Return best feature subset found across all generations
+
+Key Features:
+------------
+- Binary chromosome encoding (1=selected, 0=not selected)
+- Tournament selection for parent selection
+- Single-point or uniform crossover
+- Bit-flip mutation with adaptive rate
+- Elitism to preserve best solutions
+- JVM reload handling for Weka objective functions
+- Parallel fitness evaluation support
+
+References:
+----------
+Holland, J. H. (1992). Genetic algorithms. Scientific american, 267(1), 66-73.
+Adapted from: https://www.kaggle.com/code/tanmayunhale/genetic-algorithm-for-feature-selection
+
+Author: ASP-ML Team
+License: MIT
+Version: 1.0.0
+"""
+
 import numpy as np
 import random
 import logging
@@ -8,18 +49,64 @@ from .base import Metaheuristic, writterHistoric, MAX_ITERATIONS_JVM_WEKA, SET_M
 
 
 class GeneticAlgorithm(Metaheuristic):
-    """Genetic Algorithm, https://www.kaggle.com/code/tanmayunhale/genetic-algorithm-for-feature-selection/notebook
+    """
+    Genetic Algorithm for binary feature selection optimization.
+    
+    Implements classical GA with tournament selection, crossover, and mutation
+    operators adapted for feature selection with minimum subset constraints.
+    
+    Attributes:
+    ----------
+    generations : int
+        Number of evolutionary generations (epochs)
+    population_size : int
+        Number of individuals in population
+    length_chromosome : int
+        Length of binary chromosome (equals number of features)
+    mutationRange : float
+        Mutation probability per bit (typically 0.01-0.1)
+    n_parents : int
+        Number of parents selected for reproduction each generation
+    population : list
+        Current population of binary chromosomes
     """
     def __init__(self, experiment_index, data, labels, generations, population_size, length_chromosome, mutationRange, n_parents, objectiveFunction, type_of, indexes, path_historic):
         """
-        :param data: data without labels
-        :param labels: dataset labels
-        :param generations: number of generation to repeat the algorithm
-        :param population_size: size of the population size
-        :param length_chromosome: length of chromosome or number of features
-        :param mutationRange: mutation factor
-        :param n_parents: number of parents for the next population
-        :param objectiveFunction: the objective function to optimize"""
+        Initialize Genetic Algorithm for feature selection.
+        
+        Parameters:
+        ----------
+        experiment_index : int
+            Unique identifier for experimental run tracking
+        data : pd.DataFrame or np.ndarray
+            Feature matrix without target variable
+        labels : pd.Series or np.ndarray
+            Target class labels
+        generations : int
+            Number of evolutionary generations to run
+        population_size : int
+            Size of population (typically 50-200 individuals)
+        length_chromosome : int
+            Length of binary chromosome (number of features)
+        mutationRange : float
+            Probability of bit-flip mutation per gene (0.01-0.1)
+        n_parents : int
+            Number of parents selected each generation (typically population_size // 2)
+        objectiveFunction : callable
+            Fitness function evaluating feature subset quality
+        type_of : str
+            Identifier for objective function type
+        indexes : array-like
+            Feature indices mapping to original dataset
+        path_historic : str
+            CSV file path for logging optimization history
+        
+        Notes:
+        -----
+        - Higher mutation rates increase exploration but may disrupt convergence
+        - Tournament size affects selection pressure (larger = more elitist)
+        - Population size should scale with problem complexity
+        """
 
         Metaheuristic.__init__(self)
         self.name = 'GA'

@@ -1,3 +1,32 @@
+"""
+Objective Functions Module for Feature Selection
+================================================
+
+This module provides a comprehensive collection of objective functions and evaluation
+metrics for feature selection in the Metaheuristics-Mammaprint project.
+
+Main Categories:
+---------------
+1. **Fitness Functions**: Evaluate feature subsets using machine learning models
+2. **Information Theory Metrics**: Entropy, mutual information, information gain
+3. **Statistical Metrics**: Gain ratio, symmetrical uncertainty, ReliefF, Chi-squared
+4. **Weka Integration**: Java-based evaluation functions using Weka library
+
+Typical Usage:
+-------------
+    from ofunctions import allObjectiveFunctionWeka, knnFitnessValue
+    
+    # Evaluate feature subset using mutual information
+    score = allObjectiveFunctionWeka(feature_indices, data, labels, type_of='mi')
+    
+    # Evaluate using KNN classifier
+    auc_score = knnFitnessValue(feature_indices, data, labels, k=7)
+
+Author: ASP-ML Team
+License: MIT
+Version: 1.0.0
+"""
+
 import numpy as np
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import StratifiedKFold
@@ -16,9 +45,38 @@ from weka.attribute_selection import ASEvaluation
 from weka.attribute_selection import AttributeSelection
 from weka.filters import Filter
 
+# Global stratified K-fold cross-validation splitter
 stratifiedKFold = StratifiedKFold(n_splits=10, shuffle=True, random_state=45)
 
 def generateSubBM(features, BM):
+    """
+    Generate a feature subset matrix from the original dataset.
+    
+    Creates a new matrix containing only the specified feature columns from
+    the original dataset. This is a fundamental operation used throughout
+    the feature selection process.
+    
+    Parameters:
+    ----------
+    features : array-like
+        Indices of features to include in the subset. If empty, uses feature 0.
+    BM : numpy.ndarray
+        Original dataset matrix of shape (n_samples, n_features).
+    
+    Returns:
+    -------
+    numpy.ndarray
+        Subset matrix of shape (n_samples, len(features)) containing only
+        the selected feature columns.
+    
+    Example:
+    -------
+    >>> data = np.random.rand(100, 50)  # 100 samples, 50 features
+    >>> selected_features = [0, 5, 10, 15]
+    >>> subset = generateSubBM(selected_features, data)
+    >>> subset.shape
+    (100, 4)
+    """
     if len(features) == 0:
         features = [0]
     n, _ = BM.shape
@@ -28,6 +86,44 @@ def generateSubBM(features, BM):
     return subBM
 
 def fitnessFunctionGWO(positions, data, labels, k = 7, kFolds = 10):
+    """
+    Fitness function for Gray Wolf Optimizer with KNN classifier.
+    
+    Evaluates feature subset quality using weighted combination of AUC-ROC
+    score and subset size. Converts continuous GWO positions to binary features.
+    
+    Parameters:
+    ----------
+    positions : np.ndarray
+        Continuous position vector from GWO (values in [0, 1])
+    data : np.ndarray or pd.DataFrame
+        Complete feature matrix (all features)
+    labels : np.ndarray or pd.Series
+        Target class labels
+    k : int, optional
+        Number of neighbors for KNN classifier (default: 7)
+    kFolds : int, optional
+        Number of cross-validation folds (default: 10)
+    
+    Returns:
+    -------
+    float
+        Weighted fitness score combining AUC (90%) and feature reduction (10%)
+        Range: [0, 1], higher is better
+    
+    Notes:
+    -----
+    - Binary conversion: features selected where positions >= 0.4999
+    - Uses stratified k-fold cross-validation for robust evaluation
+    - Fitness = 0.9 * mean_AUC + 0.1 * (1 / n_features)
+    - Balances classification performance with feature reduction
+    
+    Example:
+    -------
+    >>> positions = np.array([0.7, 0.3, 0.8, 0.2, 0.9])
+    >>> fitness = fitnessFunctionGWO(positions, X_train, y_train, k=5, kFolds=5)
+    >>> print(f"Fitness: {fitness:.4f}")
+    """
     features = np.where(positions>=0.4999)[0]
     train_data = generateSubBM(features, data)
     auc_list = []
@@ -292,6 +388,61 @@ def allObjectiveFunctions(positions, data, labels, type_of = '', get_mean = True
         return relieff
         
 def allObjectiveFunctionWeka(positions, data, labels, type_of = '', get_mean = True):
+    """
+    Unified objective function interface using Weka-based evaluators.
+    
+    This function provides a single interface to evaluate feature subsets using
+    various Weka-based attribute evaluation methods. It handles Java-Python
+    integration through the python-weka-wrapper library.
+    
+    Supported Evaluation Methods:
+    ----------------------------
+    - 'mi': Mutual Information (uses scikit-learn implementation)
+    - 'sim_uncertainty': Symmetrical Uncertainty
+    - 'gain_ratio': Gain Ratio attribute evaluator
+    - 'information_gain': Information Gain evaluator
+    - 'relieff': ReliefF attribute evaluator
+    - 'chi2': Chi-Squared statistic evaluator
+    
+    Parameters:
+    ----------
+    positions : array-like
+        Indices of features to evaluate.
+    data : numpy.ndarray
+        Dataset matrix of shape (n_samples, n_features).
+    labels : numpy.ndarray
+        Target labels of shape (n_samples,).
+    type_of : str
+        Type of evaluation metric to use (see supported methods above).
+    get_mean : bool, default=True
+        If True, returns the mean score across features.
+        If False, returns individual feature scores.
+    
+    Returns:
+    -------
+    float or numpy.ndarray
+        Mean score if get_mean=True, otherwise array of feature scores.
+        Returns 0 if evaluation fails or feature subset is empty.
+    
+    Notes:
+    -----
+    - Requires Weka JVM to be initialized before calling
+    - Handles memory management by deleting temporary matrices
+    - Catches and logs exceptions gracefully
+    
+    Example:
+    -------
+    >>> # Initialize Weka JVM first
+    >>> import weka.core.jvm as jvm
+    >>> jvm.start()
+    >>> 
+    >>> # Evaluate feature subset
+    >>> features = [0, 5, 10, 15, 20]
+    >>> score = allObjectiveFunctionWeka(features, X, y, type_of='mi')
+    >>> print(f"Mutual Information score: {score}")
+    >>> 
+    >>> jvm.stop()
+    """
     try:
         if len(positions) == 0:
             return 0

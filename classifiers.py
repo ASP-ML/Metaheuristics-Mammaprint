@@ -1,3 +1,64 @@
+"""
+Machine Learning Classifiers Module
+===================================
+
+This module provides comprehensive machine learning classifier implementations
+for evaluating feature subsets selected by metaheuristic algorithms.
+
+Supported Classifiers:
+---------------------
+1. **K-Nearest Neighbors (KNN)**: Multiple k values (3, 5, 7, 9, 11)
+2. **Support Vector Machines (SVM)**: Polynomial kernel
+3. **Naive Bayes**: Gaussian Naive Bayes classifier
+4. **CART Decision Tree**: Classification and Regression Trees
+5. **Random Forest**: Ensemble of decision trees (1-100 estimators)
+6. **Multilayer Perceptron (MLP)**: Feed-forward neural network
+7. **Linear Discriminant Analysis (LDA)**: Linear classification
+8. **Quadratic Discriminant Analysis (QDA)**: Quadratic classification
+
+Evaluation Metrics:
+------------------
+- AUC-ROC: Area Under the Receiver Operating Characteristic Curve
+- Accuracy: Overall classification accuracy
+- Precision: Positive predictive value
+- Recall (Sensitivity): True positive rate
+- F1-Score: Harmonic mean of precision and recall
+- MCC: Matthews Correlation Coefficient
+- Specificity: True negative rate
+- MSE: Mean Squared Error
+- Confusion Matrix: True/False Positives/Negatives
+
+Key Features:
+------------
+- Repeated Stratified K-Fold Cross-Validation (10 splits × 3 repeats)
+- Custom TensorFlow metrics for neural networks
+- Comprehensive model history tracking
+- Automated hyperparameter testing
+- Confusion matrix analysis
+- Results export to CSV format
+
+Typical Usage:
+-------------
+    from classifiers import pipeline_updated
+    
+    # Run complete classifier evaluation pipeline
+    results_df, matrix_df = pipeline_updated(
+        features=selected_features,
+        data=X_train,
+        labels=y_train,
+        ktimes=30,
+        infoMh=experiment_info,
+        result_columns=metrics_columns,
+        matrix_columns=confusion_columns,
+        full_history_name_file='results/history.csv',
+        weights_path='weights/'
+    )
+
+Author: ASP-ML Team
+License: MIT
+Version: 1.0.0
+"""
+
 import math
 import numpy as np
 import pandas as pd
@@ -15,12 +76,36 @@ from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 from sklearn.ensemble import RandomForestClassifier
 import random
 
+# Global cross-validation configuration
 stratifiedKFold = RepeatedStratifiedKFold(
     n_splits=10, n_repeats=3, random_state=45)
 STEP_EXP_FOLD = random.randint(1000, 9999)
 tf.keras.utils.set_random_seed(26)
 
 def model_callbacks(filepath):
+    """
+    Create TensorFlow model checkpoint callback for saving best models.
+    
+    Configures a ModelCheckpoint callback that monitors validation AUC
+    and saves only the best performing model during training.
+    
+    Parameters:
+    ----------
+    filepath : str
+        Path template for saving model checkpoints. Can include
+        formatting placeholders like {epoch:02d} and {val_auc:.2f}.
+    
+    Returns:
+    -------
+    tf.keras.callbacks.ModelCheckpoint
+        Configured checkpoint callback for model training.
+    
+    Example:
+    -------
+    >>> filepath = "weights/model_epoch_{epoch:02d}_auc_{val_auc:.2f}.h5"
+    >>> callback = model_callbacks(filepath)
+    >>> model.fit(X, y, callbacks=[callback])
+    """
     checkpoint = tf.keras.callbacks.ModelCheckpoint(filepath,
                                                     verbose=0,
                                                     monitor='val_auc',

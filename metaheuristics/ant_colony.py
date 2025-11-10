@@ -1,3 +1,49 @@
+"""
+Ant Colony Optimization (ACO/ABACO) for Feature Selection
+=========================================================
+
+This module implements the Ant-Based Ant Colony Optimization (ABACO) algorithm
+specifically adapted for binary feature selection problems.
+
+ACO is inspired by the foraging behavior of ants using pheromone trails to
+find optimal paths. In feature selection, ants construct feature subsets by
+probabilistically selecting features based on pheromone levels and heuristic information.
+
+Algorithm Overview:
+------------------
+1. Initialize pheromone levels on feature connections
+2. For each iteration:
+   a. Each ant constructs a feature subset probabilistically
+   b. Evaluate fitness of all ant solutions
+   c. Update pheromones based on solution quality
+   d. Apply pheromone evaporation
+3. Return best feature subset found
+
+Key Components:
+--------------
+- **Interconnection**: Manages pheromone matrix between features
+- **Ant**: Constructs feature subsets using probabilistic rules
+- **AntColony**: Coordinates ant population and pheromone updates
+
+Key Features:
+------------
+- Binary feature selection representation
+- Pheromone-based indirect communication
+- Heuristic information (mutual information, correlation)
+- Min-max pheromone bounds to prevent stagnation
+- Elitist pheromone updates
+
+References:
+----------
+Dorigo, M., & Stützle, T. (2004). Ant colony optimization. MIT press.
+Kabir, M. M., Shahjahan, M., & Murase, K. (2012). A new hybrid ant colony
+optimization algorithm for feature selection. Expert Systems with Applications, 39(3), 3747-3763.
+
+Author: ASP-ML Team
+License: MIT
+Version: 1.0.0
+"""
+
 import numpy as np
 import random
 from datetime import datetime
@@ -5,7 +51,43 @@ from .base import Metaheuristic
 
 
 class interconnection:
+    """
+    Manages pheromone levels between feature pairs in ACO.
+    
+    Represents the connection between two features with a 2×2 pheromone matrix
+    encoding selection/non-selection combinations.
+    
+    Attributes:
+    ----------
+    tau_matrix : list[list[float]]
+        2×2 matrix storing pheromone levels:
+        - tau_matrix[0][0]: Neither feature selected
+        - tau_matrix[0][1]: Feature col selected only
+        - tau_matrix[1][0]: Feature row selected only  
+        - tau_matrix[1][1]: Both features selected
+    row : str
+        Index of first feature in connection
+    col : str
+        Index of second feature in connection
+    
+    Notes:
+    -----
+    Pheromone values are bounded by tau_min and tau_max to prevent
+    premature convergence or complete exploration loss.
+    """
     def __init__(self, tau_init, row, col):
+        """
+        Initialize feature interconnection with pheromone values.
+        
+        Parameters:
+        ----------
+        tau_init : float
+            Initial pheromone level for all matrix entries
+        row : int
+            Index of first feature
+        col : int
+            Index of second feature
+        """
         self.tau_matrix = [[tau_init, tau_init], 
                             [tau_init, tau_init]]
         self.row = str(row)
@@ -45,8 +127,69 @@ class interconnection:
 
 
 class Ant(object):
-    """Ant of ABACO metaheuristic"""
+    """
+    Individual ant agent that constructs feature subsets probabilistically.
+    
+    Each ant traverses the feature space, selecting features based on pheromone
+    trails and heuristic information, building a candidate feature subset.
+    
+    Attributes:
+    ----------
+    id : int
+        Unique identifier for this ant
+    tabu : list
+        List of already visited/selected features
+    tour_complete : bool
+        Flag indicating if subset construction is complete
+    possible_locations : list
+        All available features that can be selected
+    binary_possible_locations : list
+        Binary representation of selected features (1=selected, 0=not)
+    pheromone_map : dict
+        Reference to global pheromone matrix
+    alpha : float
+        Pheromone importance weight (typically 1-2)
+    beta : float
+        Heuristic information importance weight (typically 2-5)
+    location : int
+        Current feature being considered
+    
+    Methods:
+    -------
+    run()
+        Execute ant's feature selection process
+    choose_path()
+        Probabilistically select next feature based on pheromones and heuristic
+    """
     def __init__(self, id, start_location, possible_locations, pheromone_map, alpha, beta, _heuristic_info, first_pass=False):
+        """
+        Initialize ant agent for feature subset construction.
+        
+        Parameters:
+        ----------
+        id : int
+            Unique ant identifier
+        start_location : int
+            Initial feature index to begin construction
+        possible_locations : list
+            All available feature indices
+        pheromone_map : dict
+            Global pheromone matrix shared across colony
+        alpha : float
+            Pheromone trail importance (α ∈ [0, 5], typically 1)
+        beta : float
+            Heuristic information importance (β ∈ [0, 10], typically 2-5)
+        _heuristic_info : np.ndarray
+            Heuristic values for features (e.g., mutual information, correlation)
+        first_pass : bool, optional
+            If True, uses uniform probabilities for initial pheromone setup
+        
+        Notes:
+        -----
+        - Higher α favors exploitation of known good solutions
+        - Higher β favors features with better heuristic values
+        - Balance between α and β controls exploration vs exploitation
+        """
         self.tabu = []
         self.id = id
         self.tour_complete = False

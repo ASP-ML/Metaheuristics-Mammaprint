@@ -130,8 +130,7 @@ if __name__ == "__main__":
     END_GEN = 20
     STEP_GEN = 10
     NUMBER_EXECUTORS = 4
-    # METAS_EXPERIMENT = ['GA', 'SA', 'DE']
-    METAS_EXPERIMENT = ['GA']
+    METAS_EXPERIMENT = ['GA', 'SA', 'DE']
     OBJECTIVE_FUNCTIONS = ['relieff']
     columns=['Meta', 'OF', 'IT','Subset', 'Length', 'Settings','Classifier', 'ACC_MEAN', 'ACC_DESV', 'PRE_MEAN', 'PRE_DESV', 'MSE_MEAN', 'MSE_DESV', 'REC_MEAN', 'REC_DESV', 'AUC_MEAN', 'AUC_DESV', 'F1_MEAN', 'F1_DESV', 'MCC_MEAN','MCC_DESV']
     R_K_TIMES = 1
@@ -145,5 +144,5 @@ if __name__ == "__main__":
     results_df = pd.DataFrame(columns=columns)
     first_gen = START_GEN + STEP_GEN
     mh_dict = getMetasByObjectiveFunction(data,labels, METAS_EXPERIMENT, OBJECTIVE_FUNCTIONS, first_gen, path_report=historic_path)
-    # report_generated_list_path = run_experiment_using_weka(mh_dict, data, labels, STEPS_EXPERIMENT, first_gen, END_GEN, STEP_GEN, NUMBER_EXECUTORS, METAS_EXPERIMENT, OBJECTIVE_FUNCTIONS, base_path, historic_path)
-    print("--------------- Finish Experiment ---------------")
+    report_generated_list_path = run_experiment_using_weka(mh_dict, data, labels, STEPS_EXPERIMENT, first_gen, END_GEN, STEP_GEN, NUMBER_EXECUTORS, METAS_EXPERIMENT, OBJECTIVE_FUNCTIONS, base_path, historic_path)
+    print('>> Experiment finished. Report generated in: ', report_generated_list_path)

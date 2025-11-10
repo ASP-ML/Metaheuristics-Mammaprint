@@ -1,3 +1,42 @@
+"""
+Differential Evolution (DE) Metaheuristic for Feature Selection
+==============================================================
+
+This module implements the Differential Evolution algorithm adapted for feature
+selection tasks in the Mammaprint dataset analysis.
+
+Differential Evolution is a population-based stochastic optimization algorithm
+that uses mutation, crossover, and selection operators to evolve candidate solutions.
+
+Algorithm Overview:
+------------------
+1. Initialize random population of feature subsets
+2. For each generation:
+   a. Create mutant vectors through differential mutation
+   b. Apply crossover to create trial vectors
+   c. Evaluate fitness of trial vectors
+   d. Select better solutions for next generation
+3. Return best feature subset found
+
+Key Features:
+------------
+- Binary representation for feature selection
+- Adaptive mutation and crossover strategies
+- JVM reload handling for long-running Weka evaluations
+- Minimum subset length enforcement
+- Convergence tracking and history logging
+
+References:
+----------
+Storn, R., & Price, K. (1997). Differential evolution–a simple and efficient
+heuristic for global optimization over continuous spaces. Journal of global
+optimization, 11(4), 341-359.
+
+Author: ASP-ML Team
+License: MIT
+Version: 1.0.0
+"""
+
 import numpy as np
 import logging
 import weka.core.jvm as jvm
@@ -5,14 +44,66 @@ from .base import Metaheuristic, writterHistoric, MAX_ITERATIONS_JVM_WEKA, SET_M
 
 
 class DifferentialEvolution(Metaheuristic):
-    """Differential Evolution Algorithm"""
+    """
+    Differential Evolution algorithm for feature selection optimization.
+    
+    This class implements DE/rand/1/bin variant adapted for binary feature
+    selection problems with support for Weka-based objective functions.
+    
+    Attributes:
+    ----------
+    pop_size : int
+        Population size (number of candidate solutions)
+    pop : np.ndarray
+        Current population matrix (pop_size × n_features)
+    nFeatures : int
+        Total number of features in dataset
+    epochs : int
+        Maximum number of generations
+    mutationFactor : float
+        Differential weight F ∈ [0, 2], typically 0.5-0.8
+    crossOverFactor : float
+        Crossover probability CR ∈ [0, 1], typically 0.1-0.9
+    objectiveFunction : callable
+        Fitness evaluation function for feature subsets
+    """
     def __init__(self, experiment_index, data, labels, pop_size, n_features, epochs, mutationFactor, crossOverFactor, objectiveFunction, type_of, indexes, path_historic):
-        """:param data: dataset without labels
-           :param labels: labels of dataset
-           :param pop_size: size of total population
-           :param n_features: number of dataset features
-           :param epochs: the number of times that the algorithm is repeated
-           :param mutationFactor: """
+        """
+        Initialize Differential Evolution for feature selection.
+        
+        Parameters:
+        ----------
+        experiment_index : int
+            Unique identifier for this experimental run
+        data : pd.DataFrame or np.ndarray
+            Feature matrix without target labels
+        labels : pd.Series or np.ndarray
+            Target class labels for supervised learning
+        pop_size : int
+            Number of individuals in population (typically 5-10 × n_features)
+        n_features : int
+            Total number of features available for selection
+        epochs : int
+            Maximum number of generations to evolve
+        mutationFactor : float
+            Differential weight F, controls mutation step size (0.4-1.0)
+        crossOverFactor : float
+            Crossover probability CR, controls recombination (0.1-0.9)
+        objectiveFunction : callable
+            Function to evaluate feature subset quality
+        type_of : str
+            Name/type of objective function being used
+        indexes : array-like
+            Feature indices mapping to original dataset columns
+        path_historic : str
+            File path to save optimization history CSV
+        
+        Notes:
+        -----
+        - Population initialized with uniform random values in [0, 1]
+        - Binary feature selection via thresholding continuous values
+        - Automatically enforces minimum subset length if SET_MIN_LENGTH=True
+        """
         Metaheuristic.__init__(self)
         self.pop_size = pop_size
         self.pop = np.random.rand(pop_size, n_features)

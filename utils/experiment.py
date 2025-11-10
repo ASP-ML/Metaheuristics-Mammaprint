@@ -200,7 +200,6 @@ def getMetasByObjectiveFunction(data, labels, mh_array, of_array, generations, r
             if np.isin(key, keys): 
                 index = np.where(key == keys)[0][0]
                 subset = ast.literal_eval(results_generated[index][2])
-                print(f'>> {key}: SUBSET LOADED - {subset}')
                 local_data = si.classifiers.generateSubBM(subset, data)
                 indexes = subset
             if local_data.shape[1] > 10:
@@ -211,7 +210,6 @@ def getMetasByObjectiveFunction(data, labels, mh_array, of_array, generations, r
                     dic_metas[key] = MetaheuristicStateWrapper(si.GeneticAlgorithm(experiment_index, local_data,labels,generations, population, local_data.shape[1], 0.20, 20, si.ofunctions.allObjectiveFunctionWeka, j, indexes, path_report)) 
 
                 if i == 'DE':
-                    print('Loading new data for de: ', local_data, local_data.shape)
                     dic_metas[key] = MetaheuristicStateWrapper(si.DifferentialEvolution(experiment_index, local_data,labels, population, local_data.shape[1], generations, 0.5, 0.45, si.ofunctions.allObjectiveFunctionWeka, j, indexes, path_report)) 
             else:
                 print('>> The subset length is less than the minimum length required - ', key)
