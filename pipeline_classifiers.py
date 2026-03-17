@@ -15,7 +15,7 @@ def classifiers_evaluation(resume_file_path, data_file_name, parent_folder = Non
     resume_table_np = resume_table.to_numpy()
     data, labels = processDataSet(f'{data_file_name}.csv')
     
-    if parent_folder is not None and child_folder is not None:
+    if parent_folder == None or child_folder == None:
         date_now = datetime.now()
         date_str = date_now.strftime('%Y_%m_%d')
         time_str = date_now.strftime('%H_%M_%S')
@@ -33,23 +33,37 @@ def classifiers_evaluation(resume_file_path, data_file_name, parent_folder = Non
         
     for index, data_entry in enumerate(resume_table_np):
         print(f'>> Starting with {data_entry[1]}-{data_entry[3]}')
-        best_subset = ast.literal_eval(data_entry[5])
+        # params = {
+        #     'model': data_entry[1],
+        #     'generation': data_entry[4],
+        #     'settings': data_entry[2],
+        #     'of_name': data_entry[3],
+        #     'best_subset': data_entry[5],
+        #     'length': len(best_subset),
+        #     'root_path': path
+        # }
+
         params = {
-            'model': data_entry[1],
-            'generation': data_entry[4],
-            'settings': data_entry[2],
-            'of_name': data_entry[3],
-            'best_subset': data_entry[5],
-            'length': len(best_subset),
+            'model': data_entry[0],
+            'generation': data_entry[2],
+            'settings': data_entry[5],
+            'of_name': data_entry[1],
+            'best_subset': data_entry[3],
             'root_path': path
         }
+
+        best_subset = ast.literal_eval(params['best_subset'])
+        params['length'] = len(best_subset)
         print('PARAMS: ', params)
-        weights_path = f'{path}/{data_entry[1]}/{index}_{data_entry[1]}_{data_entry[3]}_weights_{data_entry[3]}'
-        if os.path.exists(weights_path) == False:
-            os.makedirs(weights_path)
+        # weights_path = f'{path}/{data_entry[1]}/{index}_{params['model']}_{params['of_name']}_weights_{params["generation"]}'
+        # if os.path.exists(weights_path) == False:
+        #     os.makedirs(weights_path)
+        
         # results_classifiers, matrix_results = classifiers.mlp_pipeline(best_subset, data, labels, R_K_TIMES, params, columns, columns_matrix ,f'{path}/{full_history_name_file}', weights_path)
         file = open(f'{path}/{full_history_name_file}', 'a')
-        results_classifiers, matrix_results = classifiers.pipeline_updated(best_subset, data, labels, R_K_TIMES, params, columns, columns_matrix ,f'{path}/{full_history_name_file}', weights_path)
+        # results_classifiers, matrix_results = classifiers.pipeline_updated(best_subset, data, labels, R_K_TIMES, params, columns, columns_matrix ,f'{path}/{full_history_name_file}', weights_path)
+
+        results_classifiers, matrix_results = classifiers.lasso_pipeline(best_subset, data, labels, R_K_TIMES, params, columns, columns_matrix ,f'{path}/{full_history_name_file}')
         file.close()
         results_df =  pd.concat([results_df, results_classifiers], ignore_index=True)
         matrix_df = pd.concat([matrix_df, matrix_results], ignore_index = True)
@@ -57,6 +71,6 @@ def classifiers_evaluation(resume_file_path, data_file_name, parent_folder = Non
     matrix_df.to_csv(f'{path}/matrix_step_{STEP_NAME}_report_{data_file_name}.csv', sep=',', index = False)
 
 if __name__ == "__main__":
-    base_path = 'results/default_date/default_time'
-    last_report_path = f'{base_path}/total_history_1_report.csv'
-    classifiers_evaluation(last_report_path, 'train_normal_rtf', parent_folder='default_date', child_folder='default_time', STEP_NAME='1')
+    base_path = 'resumes'
+    last_report_path = f'{base_path}/resume_class_step_1_report_train_normal_rtf.csv'
+    classifiers_evaluation(last_report_path, 'train_normal_rtf', parent_folder=None, child_folder=None, STEP_NAME='1')

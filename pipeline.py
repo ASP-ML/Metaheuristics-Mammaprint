@@ -6,9 +6,7 @@ import concurrent.futures
 # Third-party imports
 import pandas as pd
 # Local imports
-import ast
 import ofunctions
-import classifiers
 from utils import (make_experiment_dirs, processDataSet, Experiment, getMetasByObjectiveFunction, ExecutorWrapper)
 
 def run_experiment_using_weka(mh_dict,

@@ -74,6 +74,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
 import random
 
 # Global cross-validation configuration
@@ -481,6 +482,39 @@ def testLDA(X, y, experiment_info, file=None, times=1, name='LDA'):
         writeHistory(file, experiment_info, values)
     return scores
 
+def testLasso(X, y, experiment_info, file=None, times=1, name='Lasso'):
+    scores = {'accuracy': [], 'precision': [], 'mse': [], 'recall': [
+    ], 'auc': [], 'f1': [], 'mcc': [], 'confusion_matrix': [], 'specificity': []}
+    k_fold = 0
+    for train_index, test_index in stratifiedKFold.split(X, y):
+        X_train, X_test = X[train_index], X[test_index]
+        y_train, y_test = y[train_index], y[test_index]
+        lasso = LogisticRegression(penalty='l1', solver='liblinear')
+        lasso.fit(X_train, y_train)
+        y_predict = lasso.predict(X_test)
+        y_probability = lasso.predict_proba(X_test)
+        accuracy, precision, mse, recall, confusion_matrix, auc, f1, mcc, specificity = get_metrics(y_predict, y_probability, y_test)
+
+        scores['accuracy'].append(accuracy)
+        scores['precision'].append(precision)
+        scores['mse'].append(mse)
+        scores['recall'].append(recall)
+        scores['auc'].append(auc)
+        scores['f1'].append(f1)
+        scores['mcc'].append(mcc)
+        scores['confusion_matrix'].append(confusion_matrix)
+        scores['specificity'].append(specificity)
+        k_fold += 1
+        values = {'classifier': name, 'fold': str(k_fold), 'auc': str(auc), 'accu': str(accuracy), 'pre': str(
+            precision), 'mse': str(mse), 'recall': str(recall), 'f1': str(f1), 'mcc': str(mcc), 'spec': str(specificity)}
+        writeHistory(file, experiment_info, values)
+    return scores
+
+def runLasso(data, labels, k_times, infoWh, file=None):
+    print('>> Running Lasso')
+    scores = testLasso(data, labels, infoWh, file)
+    metricsArrayLasso, confusionLasso = meanDev(scores, infoWh, 'Lasso')
+    return [metricsArrayLasso], [confusionLasso]
 
 def testQDA(X, y, experiment_info, file=None, times=1, name='QDA'):
    
@@ -725,4 +759,17 @@ def qda_pipeline(features, data, labels, ktimes, infoMh, result_columns, matrix_
 
     addRowsDataFrame(results_df, qda_results_metrics)
     addRowsDataFrame(matrix_df, qda_results_matrix)
+    return results_df, matrix_df
+
+def lasso_pipeline(features, data, labels, ktimes, infoMh, result_columns, matrix_columns, full_history_name_file):
+    results_df = pd.DataFrame(columns=result_columns)
+    matrix_df = pd.DataFrame(columns=matrix_columns)
+    file = open(full_history_name_file, 'a')
+    structured_data = generateSubBM(features, data)
+    lasso_results_metrics, lasso_results_matrix = runLasso(
+        structured_data, labels, ktimes, infoMh, file)
+    file.close()
+
+    addRowsDataFrame(results_df, lasso_results_metrics)
+    addRowsDataFrame(matrix_df, lasso_results_matrix)
     return results_df, matrix_df
