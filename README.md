@@ -16,6 +16,13 @@ A comprehensive Python framework for feature selection using metaheuristic algor
 - [Metaheuristic Algorithms](#metaheuristic-algorithms)
 - [Objective Functions](#objective-functions)
 - [Classifiers](#classifiers)
+- [Analysis & Visualization Scripts](#analysis--visualization-scripts)
+  - [Statistical Testing](#statistical-testing-statistic_test)
+  - [Benchmark](#benchmark-benchmarkipynb)
+  - [Dataset Analysis](#dataset-analysis-dataset_analysisipynb)
+  - [Box Plot Analysis](#box-plot-analysis-box_plot_analysisipynb)
+  - [Jaccard Stability](#jaccard-stability-jaccardpy)
+  - [Plots](#plots-plotspy)
 - [Examples](#examples)
 - [License](#license)
 
@@ -84,6 +91,17 @@ Metaheuristics-Mammaprint/
 ├── pipeline.py             # Main feature selection pipeline
 ├── pipeline_classifiers.py # Classifier evaluation pipeline
 ├── shared_imports.py       # Centralized imports
+├── plots.py                # ROC/PR curve data-collection utilities
+├── jaccard.py              # Feature subset stability analysis across rounds
+├── benchmark.ipynb         # LASSO and SVM-RFE baseline evaluation
+├── dataset_analysis.ipynb  # Exploratory dataset analysis and train/test validation
+├── box_plot_analysis.ipynb # Gene expression box plots by prognosis label
+├── statistic_test/         # Post-hoc statistical testing pipeline
+│   ├── process_classifiers.py    # Aggregate fold results into means
+│   ├── main_statistic_test.py    # Mann-Whitney U + Benjamini-Hochberg tests
+│   ├── concat_statistic_test.py  # Concatenate per-configuration results
+│   ├── join_results.py           # Merge statistical results with fold means
+│   └── results/                  # Generated output files
 └── requirements.txt        # Project dependencies
 ```
 
@@ -436,6 +454,179 @@ Each algorithm has specific hyperparameters that can be tuned:
 - **Parameters**: Default
 - **Pros**: More flexible than LDA
 - **Cons**: Requires more samples per class
+
+## Analysis & Visualization Scripts
+
+### Statistical Testing (`statistic_test/`)
+
+The `statistic_test/` directory contains a post-processing pipeline that runs non-parametric statistical tests to compare classifier configurations and determine whether performance differences are statistically significant.
+
+#### Scripts
+
+| Script | Description |
+|---|---|
+| `process_classifiers.py` | Aggregates fold-by-fold results into mean/std metrics per configuration |
+| `main_statistic_test.py` | Runs Mann-Whitney U tests with Benjamini-Hochberg correction for each Meta/OF combination |
+| `concat_statistic_test.py` | Concatenates all per-configuration result CSVs into a single combined file |
+| `join_results.py` | Merges the combined statistical results with mean-by-fold metrics |
+
+#### Workflow
+
+```bash
+# 1. Aggregate classifier fold results
+python statistic_test/process_classifiers.py
+
+# 2. Run statistical tests (Mann-Whitney U + Benjamini-Hochberg)
+python statistic_test/main_statistic_test.py
+
+# 3. Concatenate individual test results
+python statistic_test/concat_statistic_test.py
+
+# 4. Join with mean-by-fold data
+python statistic_test/join_results.py
+```
+
+#### Output Files (`statistic_test/results/`)
+
+| File | Description |
+|---|---|
+| `meanByFold.csv` | Mean metrics per configuration across all folds |
+| `meanFullHistoryByFold.csv` | Full per-fold history with F1 means used as pivot |
+| `statistic_results/{Meta}_{OF}_{score}.csv` | Pairwise test results for each algorithm/objective function pair |
+| `combined_statistic_results.csv` | All pairwise results concatenated with BH-corrected significance flags |
+
+#### Statistical Test Output Columns
+
+- `Meta`: Metaheuristic algorithm (GA, DE, SA)
+- `OF`: Objective function
+- `Length`: Number of features selected
+- `Settings`: Algorithm hyperparameters
+- `Classifier`: Classifier being compared
+- `F1_PIVOT`: Mean F1 of the best-performing configuration (pivot)
+- `F1_Compared`: Mean F1 of the compared configuration
+- `Classifier_Compared`: Classifier of the compared configuration
+- `p-value`: Raw Mann-Whitney U p-value
+- `RBC`: Rank-Biserial Correlation (effect size)
+- `p-value-BH`: Benjamini-Hochberg corrected p-value
+- `Comparison BH`: `p < 0.05` flag after BH correction
+
+---
+
+### Benchmark (`benchmark.ipynb`)
+
+Provides baseline classification performance for comparison against the metaheuristic feature selection results.
+
+#### What it does
+
+- **LASSO baseline**: Logistic Regression with L1 regularization (`solver='liblinear'`) trained on the full feature set.
+- **SVM-RFE baseline**: SVM with a linear kernel combined with Recursive Feature Elimination (`n_features_to_select=10`) to select the top 10 genes.
+- Both methods are evaluated using **Repeated Stratified K-Fold cross-validation** (10 splits × 3 repeats, `random_state=45`).
+- Reports accuracy, precision, recall, specificity, AUC, F1, MCC, MSE, and confusion matrix elements as mean ± std across folds.
+
+#### Usage
+
+Open `benchmark.ipynb` in Jupyter and run all cells. Results are printed as a summary table.
+
+---
+
+### Dataset Analysis (`dataset_analysis.ipynb`)
+
+Exploratory analysis of the Mammaprint dataset to validate the train/test split before running experiments.
+
+#### What it does
+
+- **Class distribution**: Prints label counts and proportions for train and test sets.
+- **Feature statistics**: Compares per-feature mean and standard deviation between train and test.
+- **Mann-Whitney U test**: Tests whether each of the 70 features differs significantly between train and test, with Bonferroni correction (α/70).
+- **PCA visualization**: Projects train and test sets onto two principal components to assess distributional overlap. Saved to `pca_train_test_overlap.pdf`.
+- **Label split**: Shows how positive/negative cases are distributed between train and test.
+
+#### Usage
+
+Open `dataset_analysis.ipynb` and run all cells. No configuration needed.
+
+---
+
+### Box Plot Analysis (`box_plot_analysis.ipynb`)
+
+Visualizes gene expression distributions for selected feature subsets, split by cancer prognosis label.
+
+#### What it does
+
+- Loads the full dataset (`data/normal_rtf.csv`).
+- **Individual box plots**: For each selected gene, generates a side-by-side box plot comparing Negative (0) and Positive (1) prognosis groups. Saved to `figures/boxplot/gene_{N}.png`.
+- **Grouped box plot**: Renders all selected genes in a single multi-grouped figure with color-coded negative/positive boxes. Saved to `figures/boxplot/profile_10_gene.png`.
+- Gene labels use mathematical notation $g_{i}$ (e.g., $g_1$, $g_{10}$).
+
+#### Configuration
+
+Edit the `subset` variable in the notebook to change which genes are plotted:
+
+```python
+subset = [9, 11, 14, 21, 42, 44, 50, 58, 63, 65]  # 0-based gene indices
+```
+
+#### Usage
+
+Open `box_plot_analysis.ipynb` and run all cells. Output images are written to `figures/boxplot/`.
+
+---
+
+### Jaccard Stability (`jaccard.py`)
+
+Measures the reproducibility of selected feature subsets across independent experimental rounds.
+
+#### What it does
+
+- Loads three rounds of feature selection results (`experiment_results/R1/`, `R2/`, `R3/`).
+- Computes **Jaccard similarity** between subsets for each algorithm/objective-function pair:
+  - $J(R1, R2)$, $J(R2, R3)$, and $J(R1, R1) = 1.0$ (self-similarity sanity check).
+- Saves the stability table to `charts/jaccard/jaccard_stability.csv`.
+
+#### Jaccard Similarity
+
+$$J(A, B) = \frac{|A \cap B|}{|A \cup B|}$$
+
+Values close to 1.0 indicate highly stable feature selection; values near 0 suggest instability.
+
+#### Usage
+
+```bash
+python jaccard.py
+```
+
+Output is saved to `charts/jaccard/jaccard_stability.csv`.
+
+#### Input Format (`experiment_results/R{N}/subset_r{N}.csv`)
+
+| Column | Description |
+|---|---|
+| `Model` | Metaheuristic algorithm name |
+| `Name` | Objective function name |
+| `Subset` | Python list literal of selected gene indices |
+
+---
+
+### Plots (`plots.py`)
+
+Utility script providing ROC and Precision-Recall curve data-collection functions used by other notebooks and scripts.
+
+#### Functions
+
+| Function | Description |
+|---|---|
+| `getMetrics(Y_test, Y_predict, Y_probability)` | Returns a dict with acc, mse, precision, recall, AUC, F1, MCC |
+| `generateSubBM(features, BM)` | Extracts a feature subset matrix from the full data matrix |
+| `auc_roc_rf(sub_X, labels, estimators)` | Collects per-fold interpolated TPR values for Random Forest ROC curves |
+| `auc_roc_svm(sub_X, labels)` | Collects per-fold interpolated TPR values for SVM (linear) ROC curves |
+| `auc_roc_nb(sub_X, labels)` | Collects per-fold interpolated TPR values for Naive Bayes ROC curves |
+| `auc_roc_knn(sub_X, labels, k)` | Collects per-fold interpolated TPR values for KNN ROC curves |
+| `pr_auc_rf(sub_X, labels, estimators)` | Collects per-fold interpolated precision values for Random Forest PR curves |
+| `pr_auc_svm(sub_X, labels)` | Collects per-fold interpolated precision values for SVM PR curves |
+
+All curve functions use `RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=45)` and return interpolated arrays suitable for computing mean ± std bands.
+
+---
 
 ## Examples
 

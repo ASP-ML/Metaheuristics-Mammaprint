@@ -290,7 +290,7 @@ def testSVC(kernelP, X, y, experiment_info, file=None, times=1, name='SVM'):
     for train_index, test_index in stratifiedKFold.split(X, y):
         X_train, X_test = X[train_index], X[test_index]
         y_train, y_test = y[train_index], y[test_index]
-        clf = SVC(kernel=kernelP, probability=True)
+        clf = SVC(kernel=kernelP, probability=True, random_state=45)
         clf.fit(X_train, y_train)
         y_probability = clf.predict_proba(X_test)
         y_predict = clf.predict(X_test)

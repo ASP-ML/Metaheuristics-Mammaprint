@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 import shared_imports as si
+from datetime import datetime
+
 def printAlgorithm(name):
     print('Ha seleccionado: ', name)
 
@@ -60,3 +62,12 @@ def make_experiment_dirs(date, time, auto_time_stamp=True):
     make_path_if_not_exists(base_path)
     make_path_if_not_exists(f'{base_path}/historic')
     return base_path, f'{base_path}/historic'
+
+def generateSubBM(features, data):
+    subData = []
+    for i in range(len(data)):
+        subset = []
+        for j in features:
+            subset.append(data[i][j])
+        subData.append(subset)
+    return np.array(subData)

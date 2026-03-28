@@ -72,5 +72,5 @@ def classifiers_evaluation(resume_file_path, data_file_name, parent_folder = Non
 
 if __name__ == "__main__":
     base_path = 'resumes'
-    last_report_path = f'{base_path}/resume_class_step_1_report_train_normal_rtf.csv'
-    classifiers_evaluation(last_report_path, 'train_normal_rtf', parent_folder=None, child_folder=None, STEP_NAME='1')
+    last_report_path = f'{base_path}/resume_class_step_3_report_train_normal_rtf.csv'
+    classifiers_evaluation(last_report_path, 'train_normal_rtf', parent_folder=None, child_folder=None, STEP_NAME='3')

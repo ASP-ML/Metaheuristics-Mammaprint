@@ -1,0 +1,19 @@
+Model,OF,"J(R1,R1)","J(R1,R2)","J(R2,R3)"
+DE,χ²,1.0,1.0,1.0
+DE,Gain Ratio,1.0,1.0,1.0
+DE,Info. Gain,1.0,1.0,1.0
+DE,Mutual Info.,1.0,1.0,1.0
+DE,ReliefF,1.0,1.0,1.0
+DE,Sym. Uncert.,1.0,1.0,1.0
+GA,χ²,1.0,0.4375,0.7143
+GA,Gain Ratio,1.0,0.4,0.8333
+GA,Info. Gain,1.0,0.5926,0.625
+GA,Mutual Info.,1.0,0.5217,0.8333
+GA,ReliefF,1.0,0.4667,0.7857
+GA,Sym. Uncert.,1.0,0.44,0.9091
+SA,χ²,1.0,0.4138,0.8333
+SA,Gain Ratio,1.0,0.5185,0.7143
+SA,Info. Gain,1.0,0.4348,1.0
+SA,Mutual Info.,1.0,0.375,0.8333
+SA,ReliefF,1.0,0.5263,0.5
+SA,Sym. Uncert.,1.0,0.3448,1.0
