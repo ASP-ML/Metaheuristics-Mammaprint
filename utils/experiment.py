@@ -185,7 +185,7 @@ def runExperiment(mh_array, data, labels, runPipelineClassifiers = True):
     si.plt.savefig(path + '/fig_'+time)
     return bestHistoric, path + '/' + nameExperiment, subset_results, np.array(historicToGetMax)
 
-def getMetasByObjectiveFunction(data, labels, mh_array, of_array, generations, results_generated = np.array([]), path_report = None):
+def getMetasByObjectiveFunction(data, labels, mh_array, of_array, generations, results_generated = np.array([]), path_report = None, seed = 45):
     local_data = data
     dic_metas = {}
     keys = np.array([])
@@ -204,13 +204,13 @@ def getMetasByObjectiveFunction(data, labels, mh_array, of_array, generations, r
                 indexes = subset
             if local_data.shape[1] > 10:
                 if i == 'SA':
-                    dic_metas[key] = MetaheuristicStateWrapper(si.SimulatedAnnealing(experiment_index, local_data, labels, 40, generations, local_data.shape[1], 0, 0.8, si.ofunctions.allObjectiveFunctionWeka, j, indexes, path_report)) 
-                    
+                    dic_metas[key] = MetaheuristicStateWrapper(si.SimulatedAnnealing(experiment_index, local_data, labels, 40, generations, local_data.shape[1], 0, 0.8, si.ofunctions.allObjectiveFunctionWeka, j, indexes, path_report, seed=seed))
+
                 if i == 'GA':
-                    dic_metas[key] = MetaheuristicStateWrapper(si.GeneticAlgorithm(experiment_index, local_data,labels,generations, population, local_data.shape[1], 0.20, 20, si.ofunctions.allObjectiveFunctionWeka, j, indexes, path_report)) 
+                    dic_metas[key] = MetaheuristicStateWrapper(si.GeneticAlgorithm(experiment_index, local_data,labels,generations, population, local_data.shape[1], 0.20, 20, si.ofunctions.allObjectiveFunctionWeka, j, indexes, path_report, seed=seed))
 
                 if i == 'DE':
-                    dic_metas[key] = MetaheuristicStateWrapper(si.DifferentialEvolution(experiment_index, local_data,labels, population, local_data.shape[1], generations, 0.5, 0.45, si.ofunctions.allObjectiveFunctionWeka, j, indexes, path_report)) 
+                    dic_metas[key] = MetaheuristicStateWrapper(si.DifferentialEvolution(experiment_index, local_data,labels, population, local_data.shape[1], generations, 0.5, 0.45, si.ofunctions.allObjectiveFunctionWeka, j, indexes, path_report, seed=seed))
             else:
                 print('>> The subset length is less than the minimum length required - ', key)
         experiment_index = experiment_index + 1

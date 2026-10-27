@@ -25,12 +25,24 @@ MIN_LENGTH_SUBSET : int
     Minimum number of features in valid subsets (default: 10)
     Prevents overfitting and ensures robust model performance
 
+SELECTION_THRESHOLD : float
+    A continuous position >= 0.5 selects the feature (DE and SA encodings)
+
+Reproducibility:
+---------------
+Every algorithm owns a ``numpy.random.Generator`` (``self.rng``) seeded through
+``set_seed``. Its state travels with ``getParams``/``setParams``, so a run
+interrupted by a Weka JVM reload resumes the same random stream.
+
 Author: ASP-ML Team
 License: MIT
 Version: 1.0.0
 """
 
 import os
+import zlib
+
+import numpy as np
 
 # ============================================================================
 # GLOBAL CONFIGURATION CONSTANTS
@@ -44,6 +56,19 @@ SET_MIN_LENGTH = True
 
 MIN_LENGTH_SUBSET = 10
 """Minimum required number of features in any valid subset."""
+
+SELECTION_THRESHOLD = 0.5
+"""Continuous positions >= this value mark a feature as selected (DE and SA encodings)."""
+
+
+def selected_features(vector):
+    """Indices of the features selected by a continuous position vector."""
+    return np.where(np.asarray(vector) >= SELECTION_THRESHOLD)[0]
+
+
+def stream_key(text: str) -> int:
+    """Stable non-negative integer derived from a text, used to separate random streams."""
+    return zlib.crc32(text.encode('utf-8'))
 
 def writterHistoric(path: str, data: dict):
     """
@@ -84,9 +109,8 @@ def writterHistoric(path: str, data: dict):
     if os.path.exists(path) == False:
         with open(path, 'w') as file:
             file.write('Gen,Epoch,Subset,Merit\n')
-    else:
-        with open(path, 'a') as file:
-            file.write(f'{data["gen"]},{data["epoch"]},{data["subset"]},{data["merit"]}\n')
+    with open(path, 'a') as file:
+        file.write(f'{data["gen"]},{data["epoch"]},{data["subset"]},{data["merit"]}\n')
 
 class Metaheuristic:
     """
@@ -143,7 +167,35 @@ class Metaheuristic:
         self.historic = []
         self.bestScoreValue = 0
         self.bestSubset = []
-    
+        self.seed = None
+        self.seed_keys = []
+        self.rng = np.random.default_rng()
+        self.n_evaluations = 0
+
+    def set_seed(self, seed, *keys):
+        """
+        Seed the private random generator of the algorithm.
+
+        Each run gets its own stream derived from (seed, *keys), so different
+        metaheuristic/objective combinations never share random numbers.
+        With seed=None the generator is seeded from OS entropy (not reproducible).
+        """
+        self.seed = seed
+        self.seed_keys = list(keys)
+        self.reseed()
+
+    def reseed(self, *extra_keys):
+        """Restart the random stream, optionally appending keys (e.g. the restart budget)."""
+        if self.seed is None:
+            self.rng = np.random.default_rng()
+        else:
+            self.rng = np.random.default_rng([self.seed, *self.seed_keys, *extra_keys])
+
+    def evaluate(self, features, data):
+        """Evaluate a feature subset with the objective function, counting the evaluation."""
+        self.n_evaluations += 1
+        return self.objectiveFunction(features, data, self.labels, self.type_of)
+
     def getHistoric(self):
         """
         Get the complete optimization history.

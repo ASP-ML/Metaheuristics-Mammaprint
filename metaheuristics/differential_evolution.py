@@ -34,22 +34,23 @@ optimization, 11(4), 341-359.
 
 Author: ASP-ML Team
 License: MIT
-Version: 1.0.0
+Version: 1.1.0
 """
 
 import numpy as np
 import logging
 import weka.core.jvm as jvm
-from .base import Metaheuristic, writterHistoric, MAX_ITERATIONS_JVM_WEKA, SET_MIN_LENGTH, MIN_LENGTH_SUBSET
+from .base import (Metaheuristic, writterHistoric, selected_features, stream_key,
+                   MAX_ITERATIONS_JVM_WEKA, SET_MIN_LENGTH, MIN_LENGTH_SUBSET)
 
 
 class DifferentialEvolution(Metaheuristic):
     """
     Differential Evolution algorithm for feature selection optimization.
-    
+
     This class implements DE/rand/1/bin variant adapted for binary feature
     selection problems with support for Weka-based objective functions.
-    
+
     Attributes:
     ----------
     pop_size : int
@@ -67,10 +68,10 @@ class DifferentialEvolution(Metaheuristic):
     objectiveFunction : callable
         Fitness evaluation function for feature subsets
     """
-    def __init__(self, experiment_index, data, labels, pop_size, n_features, epochs, mutationFactor, crossOverFactor, objectiveFunction, type_of, indexes, path_historic):
+    def __init__(self, experiment_index, data, labels, pop_size, n_features, epochs, mutationFactor, crossOverFactor, objectiveFunction, type_of, indexes, path_historic, seed=None):
         """
         Initialize Differential Evolution for feature selection.
-        
+
         Parameters:
         ----------
         experiment_index : int
@@ -97,16 +98,17 @@ class DifferentialEvolution(Metaheuristic):
             Feature indices mapping to original dataset columns
         path_historic : str
             File path to save optimization history CSV
-        
+        seed : int or None
+            Base seed of the private random generator (None = not reproducible)
+
         Notes:
         -----
         - Population initialized with uniform random values in [0, 1]
-        - Binary feature selection via thresholding continuous values
+        - Binary feature selection via thresholding continuous values at 0.5
         - Automatically enforces minimum subset length if SET_MIN_LENGTH=True
         """
         Metaheuristic.__init__(self)
         self.pop_size = pop_size
-        self.pop = np.random.rand(pop_size, n_features)
         self.nFeatures = n_features
         self.objectiveFunction = objectiveFunction
         self.epochs = epochs
@@ -116,60 +118,62 @@ class DifferentialEvolution(Metaheuristic):
         self.type_of = type_of
         self.experiment_index = experiment_index
         self.reload_weka_jvm = False
-        self.current_best_score = 0
         self.current_generation = 0
-        self.current_best_subset = []
-        self.prevObjValue = 0
         self.path_historic = path_historic
         self.obj_all = None
         self.setDataSet(data, labels, indexes)
+        self.set_seed(seed, stream_key(f'{self.name}_{self.type_of}'), n_features)
+        self.pop = self.rng.random((pop_size, n_features))
         if SET_MIN_LENGTH == True:
             self.pop = self.debug(self.pop)
-            print('POP: ', self.pop)
-    
+
     def getParams(self):
         info_dict = {
             'name': self.name,
             'of_name': self.type_of,
             'iterations': self.epochs,
-            'settings': 'Pop: ' + str(self.pop_size) + ' N features: ' + str(self.nFeatures) + ' MF: ' + str(self.mutationFactor) + ' COF: ' + str(self.crossOverFactor),
+            'settings': 'Pop: ' + str(self.pop_size) + ' N features: ' + str(self.nFeatures) + ' MF: ' + str(self.mutationFactor) + ' COF: ' + str(self.crossOverFactor) + ' Evals: ' + str(self.n_evaluations),
             'best_subset': self.bestSubset,
             'best_score_value': self.bestScoreValue,
             'experiment_index': self.experiment_index,
-            'current_best_subset': self.current_best_subset,
             'current_generation': self.current_generation,
-            'current_best_score': self.current_best_score,
             'reload_weka_jvm': self.reload_weka_jvm,
             'population': self.pop,
-            'prevObjValue': self.prevObjValue,
-            'obj_all': self.obj_all
+            'obj_all': self.obj_all,
+            'n_evaluations': self.n_evaluations,
+            'rng_state': self.rng.bit_generator.state
         }
         return info_dict
-    
+
     def setParams(self, params):
         self.pop = params['population']
         self.reload_weka_jvm = params['reload_weka_jvm']
-        self.current_best_score = params['current_best_score']
         self.current_generation = params['current_generation']
-        self.current_best_subset = params['current_best_subset']
-        self.prevObjValue = params['prevObjValue']
         self.obj_all = params['obj_all']
-    
+        self.n_evaluations = params['n_evaluations']
+        self.rng.bit_generator.state = params['rng_state']
+
     def initialize(self):
         self.nFeatures = self.train_data.shape[1]
-        self.pop = np.random.rand(self.pop_size, self.nFeatures)
+        self.pop = self.rng.random((self.pop_size, self.nFeatures))
         if SET_MIN_LENGTH == True:
             self.pop = self.debug(self.pop)
         if self.nFeatures == 1:
             self.pop[0][0] = 0.75
         self.historic = []
-    
+        self.obj_all = None
+        self.current_generation = 0
+        self.reload_weka_jvm = False
+        self.n_evaluations = 0
+
     def set_new_iterations(self, iterations):
+        # Each restart budget gets its own reproducible random stream
+        self.reseed(iterations)
         self.initialize()
         self.epochs = iterations
         self.bestSubset = []
         self.bestScoreValue = 0
-    
+
     def setDataSet(self, data, labels, indexes):
         self.train_data = data
         self.labels = labels
@@ -178,19 +182,17 @@ class DifferentialEvolution(Metaheuristic):
 
     def setExperimentIndex(self, experiment_index):
         self.experiment_index = experiment_index
-    
+
     def debug(self, population):
+        """Repair individuals selecting fewer than MIN_LENGTH_SUBSET features."""
         self.printF('Executing debug')
-        arrayFixed = []
-        for i in population:
-            check = np.where(i > 0.499999)[0].shape[0]
-            if check < (MIN_LENGTH_SUBSET):
-                while np.where(i > 0.499999)[0].shape[0] < (MIN_LENGTH_SUBSET):
-                    random_int = np.random.randint(0, self.nFeatures)
-                    i[random_int] = np.random.uniform(0.5, 1)
-            arrayFixed.append(i)
-        return np.array(arrayFixed)
-    
+        population = np.array(population, dtype=float)
+        min_length = min(MIN_LENGTH_SUBSET, self.nFeatures)
+        for individual in population:
+            while selected_features(individual).shape[0] < min_length:
+                individual[self.rng.integers(0, self.nFeatures)] = self.rng.uniform(0.5, 1)
+        return population
+
     def mutation(self, x, F):
         """Function to make the muttation of trial chromosome
             :param x: Trial vector
@@ -202,93 +204,66 @@ class DifferentialEvolution(Metaheuristic):
         """According to the crossover factor, the trial is composed using the mutated chromosome and the target chromosome
             :param mutated: mutated chromosome
             :param target: target chromosome"""
-        p = np.random.rand(self.nFeatures)
-        rnbr = np.random.randint(self.nFeatures, size=1)[0]
-        trial = [target[i] if (p[i] > self.crossOverFactor and i != rnbr) else mutated[i] for i in range(self.nFeatures)]
-        return trial
-    
+        p = self.rng.random(self.nFeatures)
+        rnbr = self.rng.integers(self.nFeatures)
+        take_mutated = p <= self.crossOverFactor
+        take_mutated[rnbr] = True
+        return np.where(take_mutated, mutated, target)
+
     def runProcess(self):
         jvm.start(packages=True, logging_level=logging.INFO)
         _ = self.run()
         jvm.stop()
         return self.getParams()
-    
+
     def printF(self, msg):
         print(f'>> {self.name} - {self.type_of}: ', msg)
-    
+
     def run(self):
-        # First the algorithm computes the objectiveFunction value for the initial population
-        reload_weka = False
-        bestObjValue = 0
-        if self.reload_weka_jvm == False:
-            epoch = 0
-            obj_all = [self.objectiveFunction(np.where(i > 0.499999)[0], self.train_data, self.labels, self.type_of) for i in self.pop]
-            bestChromosome = self.pop[np.argmax(obj_all)]
-            tempo_chromosome = self.pop[np.argmax(obj_all)]
-            lenTempo = np.where(tempo_chromosome > 0.499999)[0].shape[0]
-            if lenTempo >= 9:
-                bestChromosome = tempo_chromosome
-                prevObjValue = bestObjValue
-                nFeaturesSelected = np.where(bestChromosome > 0.499999)[0].shape[0]
+        resumed = self.reload_weka_jvm
+        if resumed == False:
+            start_epoch = 0
+            obj_all = [self.evaluate(selected_features(individual), self.train_data) for individual in self.pop]
         else:
-            epoch = self.current_generation
-            prevObjValue = self.prevObjValue
-            obj_all = self.obj_all
-            bestChromosome = self.current_best_subset
-            reload_weka = True
-        # print('POPULATION LOADED: ', self.pop)
-        nFeaturesSelected = np.where(bestChromosome > 0.499999)[0].shape[0]
-        bestObjValue = max(obj_all)
-        prevObjValue = bestObjValue
+            start_epoch = self.current_generation
+            obj_all = list(self.obj_all)
         self.reload_weka_jvm = False
-        # Starting with the epochs
-        for epoch in range(epoch, self.epochs):
-            if epoch % MAX_ITERATIONS_JVM_WEKA == 0 and epoch != 1 and epoch != 0 and reload_weka == False:
-                self.prevObjValue = prevObjValue
-                self.reload_weka_jvm = True
+        # Greedy one-to-one selection never loses the population best, so the best
+        # individual is always argmax(obj_all)
+        best_index = int(np.argmax(obj_all))
+        bestChromosome = self.pop[best_index].copy()
+        bestObjValue = obj_all[best_index]
+        for epoch in range(start_epoch, self.epochs):
+            if epoch % MAX_ITERATIONS_JVM_WEKA == 0 and epoch > 1 and resumed == False:
                 self.current_generation = epoch
                 self.obj_all = obj_all
-                self.current_best_subset = bestChromosome
+                self.reload_weka_jvm = True
                 self.printF('Ask for reload weka jvm')
                 break
+            resumed = False
             for chromosome in range(self.pop_size):
                 # Choose three candidates a, b and c that are not the current one
                 candidates = [candidate for candidate in range(self.pop_size) if candidate != chromosome]
-                a, b, c = self.pop[np.random.choice(candidates, 3, replace=False)]
-                # Perform a mutation
-                mutated = self.mutation([a, b, c], self.mutationFactor)
-                mutated = np.clip(mutated, 0, 1)
-                # Perform a crossover using the constant of crossOver and the totalOfFeatures as dimensions
-                trial = self.crossOver(mutated=mutated, target=self.pop[chromosome])
-                trial = np.around(trial, decimals=8)
-                # Compute the objective value for the trial vector
-                # objTarget = self.objectiveFunction(self.pop[chromosome], self.train_data, self.labels, entropyDataSet)
-                objTarget = self.objectiveFunction(np.where(self.pop[chromosome] > 0.4999)[0], self.train_data, self.labels, self.type_of)
-                objTrial = self.objectiveFunction(np.where(trial > 0.49999)[0], self.train_data, self.labels, self.type_of)
-                # Perform a selection
-                if objTrial > objTarget:
-                    # Replace the targetVector with the trialVector
-                    if SET_MIN_LENGTH == True and (np.where(trial > 0.49999)[0].shape[0] >= (MIN_LENGTH_SUBSET)):
-                        self.pop[chromosome] = trial
-                        obj_all[chromosome] = objTrial
-            # Find the best after each iteration
-            bestObjValue = max(obj_all)
-            if bestObjValue > prevObjValue:
-                tempo_chromosome = self.pop[np.argmax(obj_all)]
-                lenTempo = np.where(tempo_chromosome > 0.499999)[0].shape[0]
-                if lenTempo >= 9:
-                    bestChromosome = tempo_chromosome
-                    prevObjValue = bestObjValue
-                    nFeaturesSelected = np.where(bestChromosome > 0.499999)[0].shape[0]
-                else:
-                    print('Length dont allowed')
-            parsedSubset = [self.original_indexes[i] for i in list(np.where(np.array(bestChromosome) > 0.499999)[0])]
-            writterHistoric(f'{self.path_historic}/{self.name}_{self.type_of}.csv', {'epoch': epoch, 'gen': self.epochs, 'subset': str(parsedSubset), 'merit': prevObjValue})
-            self.printF(f'Epoch: {epoch}/{self.epochs} - Best Score: {prevObjValue} - Length: {nFeaturesSelected}')
-            reload_weka = False
-        self.bestScoreValue = prevObjValue
-        print('Best chromsome: ', bestChromosome)
-        print('WHERE: ', np.where(np.array(bestChromosome) > 0.499999))
-        self.bestSubset = [self.original_indexes[i] for i in list(np.where(np.array(bestChromosome) > 0.499999)[0])]
+                a, b, c = self.pop[self.rng.choice(candidates, 3, replace=False)]
+                mutated = np.clip(self.mutation([a, b, c], self.mutationFactor), 0, 1)
+                trial = np.around(self.crossOver(mutated=mutated, target=self.pop[chromosome]), decimals=8)
+                trial_features = selected_features(trial)
+                # Infeasible trials are rejected without spending an evaluation
+                if SET_MIN_LENGTH == True and trial_features.shape[0] < MIN_LENGTH_SUBSET:
+                    continue
+                # The target fitness is already stored in obj_all (the objective is deterministic)
+                objTrial = self.evaluate(trial_features, self.train_data)
+                if objTrial > obj_all[chromosome]:
+                    self.pop[chromosome] = trial
+                    obj_all[chromosome] = objTrial
+            best_index = int(np.argmax(obj_all))
+            if obj_all[best_index] > bestObjValue:
+                bestObjValue = obj_all[best_index]
+                bestChromosome = self.pop[best_index].copy()
+            parsedSubset = [self.original_indexes[i] for i in selected_features(bestChromosome)]
+            writterHistoric(f'{self.path_historic}/{self.name}_{self.type_of}.csv', {'epoch': epoch, 'gen': self.epochs, 'subset': str(parsedSubset), 'merit': bestObjValue})
+            self.printF(f'Epoch: {epoch}/{self.epochs} - Best Score: {bestObjValue} - Length: {len(parsedSubset)} - Evals: {self.n_evaluations}')
+        self.bestScoreValue = bestObjValue
+        self.bestSubset = [self.original_indexes[i] for i in selected_features(bestChromosome)]
         print('Self best subset: ', self.bestSubset, len(self.bestSubset))
         return self.bestSubset
