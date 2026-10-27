@@ -55,7 +55,8 @@ class Experiment:
                                                              str(len(params['best_subset'])),
                                                               params['best_score_value']])
     def getBestByObjectiveFunction(self, index_step, get_df: bool = False, add_key_column: bool = True):
-        merge = np.concatenate(self.data_experiment[index_step])
+        # Metaheuristics with no combination run in this step have no rows
+        merge = np.concatenate([rows for rows in self.data_experiment[index_step] if len(rows) > 0])
         df = pd.DataFrame(merge, columns= self.header_columns)
         df['Merit'] = df['Merit'].astype('float64')
         df = df.loc[df.groupby(['Model', 'Name']).Merit.idxmax(),['Model','Generation', 'Subset', 'Length', 'Name', 'Settings', 'Merit']]
@@ -67,7 +68,8 @@ class Experiment:
         else:
             return df.to_numpy()
     def getHistoricByStep(self, index_step):
-        merge = np.concatenate(self.data_experiment[index_step])
+        # Metaheuristics with no combination run in this step have no rows
+        merge = np.concatenate([rows for rows in self.data_experiment[index_step] if len(rows) > 0])
         df = pd.DataFrame(merge, columns= self.header_columns)
         return df
     def getLastDataEntry(self):
@@ -186,10 +188,8 @@ def runExperiment(mh_array, data, labels, runPipelineClassifiers = True):
     return bestHistoric, path + '/' + nameExperiment, subset_results, np.array(historicToGetMax)
 
 def getMetasByObjectiveFunction(data, labels, mh_array, of_array, generations, results_generated = np.array([]), path_report = None, seed = 45):
-    local_data = data
     dic_metas = {}
     keys = np.array([])
-    indexes = [i for i in range(data.shape[1])]
     if len(results_generated) > 0:
         keys = results_generated[:, -1]
     experiment_index = 0
@@ -197,7 +197,13 @@ def getMetasByObjectiveFunction(data, labels, mh_array, of_array, generations, r
         population = int(round(data.shape[1] / 2, 0))
         for j in of_array:
             key = i + '_' + j
-            if np.isin(key, keys): 
+            local_data = data
+            indexes = [k for k in range(data.shape[1])]
+            if len(keys) > 0 and not np.isin(key, keys):
+                # Not run in the previous round (its subset already had the minimum length)
+                print('>> No subset from the previous round, skipped - ', key)
+                continue
+            if np.isin(key, keys):
                 index = np.where(key == keys)[0][0]
                 subset = ast.literal_eval(results_generated[index][2])
                 local_data = si.classifiers.generateSubBM(subset, data)

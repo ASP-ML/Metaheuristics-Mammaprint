@@ -12,7 +12,7 @@ Algorithm Overview:
 ------------------
 1. Initialize with random feature subset and high temperature
 2. For each iteration (move):
-   a. Generate neighbor solution via perturbation (add, replace or remove a feature)
+   a. Generate neighbor solution via perturbation (add or remove a feature)
    b. Evaluate fitness of neighbor
    c. Accept neighbor if better, or probabilistically if worse
    d. Reduce temperature according to cooling schedule
@@ -22,9 +22,9 @@ Key Features:
 ------------
 - Temperature-based acceptance probability
 - Metropolis acceptance criterion for escaping local optima
-- Geometric cooling schedule from T₀ to T_min over the iteration budget
-- Neighbourhood moves: add, replace or remove one feature; recently visited
-  subsets are skipped when an unvisited neighbour can be found
+- Geometric cooling after every move, from T₀ down to T_min
+- Neighbourhood moves: add or remove one random feature
+- Initial subset drawn from a Gaussian distribution (a feature is selected when its draw is > 0)
 - JVM reload handling for Weka objective functions
 - Minimum subset length enforcement
 
@@ -34,19 +34,14 @@ Acceptance probability (maximization):
 P(accept) = exp(-ΔE / T)
 
 where:
-- ΔE: fitness loss (current - neighbor), divided by |current| when
-  relative_delta=True so the temperature scale does not depend on the
-  magnitude of the objective (CHI2 scores ~10¹ vs. SU/GR/MI ~10⁻²)
+- ΔE: fitness loss (current - neighbor) of a worse neighbour
 - T: current temperature
 
 Cooling schedule:
-T(k) = T₀ · α^k, k = temperature level
+T(t + 1) = α · T(t), t = current move
 
-The run is split into L levels (L = number of α-steps from T₀ to T_min,
-capped by the iteration budget) with ceil(budget / L) moves per level, so
-the whole budget is used and T reaches T_min at the end of the run. When
-the budget is shorter than the number of α-steps, α is adjusted so that
-T still reaches T_min.
+The search stops when T falls below T_min (early stopping criterion) or
+when the move budget is exhausted, whichever comes first.
 
 References:
 ----------
@@ -62,11 +57,8 @@ import math
 import numpy as np
 import logging
 import weka.core.jvm as jvm
-from .base import (Metaheuristic, writterHistoric, selected_features, stream_key,
+from .base import (Metaheuristic, writterHistoric, stream_key,
                    MAX_ITERATIONS_JVM_WEKA, SET_MIN_LENGTH, MIN_LENGTH_SUBSET)
-
-MAX_NEIGHBOUR_TRIES = 50
-"""Attempts to find an unvisited neighbour before accepting a revisit."""
 
 
 class SimulatedAnnealing(Metaheuristic):
@@ -81,7 +73,7 @@ class SimulatedAnnealing(Metaheuristic):
     initTemp : float
         Initial temperature T₀ (higher = more exploration)
     min_temp : float
-        Final temperature T_min reached at the end of the iteration budget
+        Temperature T_min below which the search stops
     temperature : float
         Current temperature
     epochs : int
@@ -97,7 +89,7 @@ class SimulatedAnnealing(Metaheuristic):
     bestFitValue : float
         Fitness of best subset
     """
-    def __init__(self, experiment_index, data, labels, initTemp, iterations, nFeatures, beta, alpha, objectiveFunction, type_of, indexes, path_historic, seed=None, min_temp=1e-4, relative_delta=True):
+    def __init__(self, experiment_index, data, labels, initTemp, iterations, nFeatures, beta, alpha, objectiveFunction, type_of, indexes, path_historic, seed=None, min_temp=1e-4):
         """
         Initialize Simulated Annealing for feature selection.
 
@@ -118,7 +110,7 @@ class SimulatedAnnealing(Metaheuristic):
         beta : float
             Unused, kept for backward compatibility of the constructor signature
         alpha : float
-            Cooling rate for geometric schedule (higher = slower cooling)
+            Cooling rate applied after every move (higher = slower cooling)
         objectiveFunction : callable
             Function to evaluate feature subset quality
         type_of : str
@@ -130,14 +122,11 @@ class SimulatedAnnealing(Metaheuristic):
         seed : int or None
             Base seed of the private random generator (None = not reproducible)
         min_temp : float
-            Final temperature T_min (default 1e-4)
-        relative_delta : bool
-            Divide the fitness loss by |current fitness| before the Metropolis test
+            Temperature T_min below which the search stops (default 1e-4)
         """
         Metaheuristic.__init__(self)
         self.initTemp = initTemp
         self.min_temp = min_temp
-        self.relative_delta = relative_delta
         self.epochs = iterations
         self.objectiveFunction = objectiveFunction
         self.nFeatures = nFeatures
@@ -166,7 +155,6 @@ class SimulatedAnnealing(Metaheuristic):
         self.bestSubset = params['bestSubset']
         self.bestFitValue = params['bestFitValue']
         self.temperature = params['temperature']
-        self.visited = params['visited']
         self.n_evaluations = params['n_evaluations']
         self.rng.bit_generator.state = params['rng_state']
 
@@ -174,12 +162,11 @@ class SimulatedAnnealing(Metaheuristic):
         self.experiment_index = experiment_index
 
     def getParams(self):
-        _, moves_per_level, alpha = self.cooling_schedule()
         info_dict = {
             'name': self.name,
             'of_name': self.type_of,
             'iterations': self.epochs,
-            'settings': 'T0: ' + str(self.initTemp) + ' Tmin: ' + str(self.min_temp) + ' Alpha: ' + str(round(alpha, 4)) + ' Moves/level: ' + str(moves_per_level) + ' N features: ' + str(self.nFeatures) + ' Evals: ' + str(self.n_evaluations),
+            'settings': 'T0: ' + str(self.initTemp) + ' Tmin: ' + str(self.min_temp) + ' Alpha: ' + str(self.alpha) + ' N features: ' + str(self.nFeatures) + ' Evals: ' + str(self.n_evaluations),
             'best_subset': [self.original_indexes[i] for i in list(self.bestSubset)],
             'best_score_value': self.bestScoreValue,
             'experiment_index': self.experiment_index,
@@ -190,7 +177,6 @@ class SimulatedAnnealing(Metaheuristic):
             'bestSubset': self.bestSubset,
             'bestFitValue': self.bestFitValue,
             'temperature': self.temperature,
-            'visited': self.visited,
             'n_evaluations': self.n_evaluations,
             'rng_state': self.rng.bit_generator.state
         }
@@ -213,7 +199,6 @@ class SimulatedAnnealing(Metaheuristic):
         self.bestSubset = []
         self.bestFitValue = 0
         self.temperature = self.initTemp
-        self.visited = set()
         self.n_evaluations = 0
 
     def runProcess(self):
@@ -225,80 +210,45 @@ class SimulatedAnnealing(Metaheuristic):
     def printF(self, msg):
         print(f'>> {self.name} - {self.type_of}: ', msg)
 
-    def debug(self, subset):
-        """Repair a continuous position vector selecting fewer than MIN_LENGTH_SUBSET features."""
+    def debug(self, selection):
+        """Repair a boolean feature selection with fewer than MIN_LENGTH_SUBSET features."""
         self.printF('Executing debug')
-        subset_copy = np.array(subset, dtype=float)
+        selection = np.array(selection, dtype=bool)
         min_length = min(MIN_LENGTH_SUBSET, self.nFeatures)
-        while selected_features(subset_copy).shape[0] < min_length:
-            subset_copy[self.rng.integers(0, self.nFeatures)] = self.rng.uniform(0.5, 1)
-        return subset_copy
-
-    def cooling_schedule(self):
-        """
-        Temperature levels, moves per level and cooling rate for the current budget.
-
-        With the configured α, L = ceil(log(T_min / T₀) / log(α)) levels take T₀ to
-        T_min. If the budget allows it, α is kept and every level gets
-        ceil(budget / L) moves; otherwise one move per level is used and α is
-        adjusted so that T_min is still reached at the end of the run.
-        """
-        levels_at_alpha = max(1, math.ceil(math.log(self.min_temp / self.initTemp) / math.log(self.alpha)))
-        budget = max(1, self.epochs)
-        if budget >= levels_at_alpha:
-            return levels_at_alpha, math.ceil(budget / levels_at_alpha), self.alpha
-        return budget, 1, (self.min_temp / self.initTemp) ** (1 / budget)
+        while selection.sum() < min_length:
+            selection[self.rng.integers(0, self.nFeatures)] = True
+        return selection
 
     def acceptance_probability(self, current_fit, new_fit):
-        """Metropolis criterion for a worse neighbour (maximization)."""
-        delta = current_fit - new_fit
-        if self.relative_delta:
-            delta = delta / max(abs(current_fit), 1e-12)
-        return math.exp(-delta / self.temperature)
+        """Metropolis criterion for a worse neighbour (maximization): P = exp(-ΔE / T)."""
+        return math.exp(-(current_fit - new_fit) / self.temperature)
 
     def perturb(self, current):
-        """Add, replace or remove one feature; None if no feasible move exists."""
+        """Add or remove one feature; None if no feasible move exists."""
         remaining = np.setdiff1d(np.arange(self.nFeatures), current)
         moves = []
         if len(remaining) > 0:
-            moves += ['Add', 'Replace']
+            moves.append('Add')
         if len(current) > MIN_LENGTH_SUBSET:
             moves.append('Remove')
         if len(moves) == 0:
             return None
-        move = self.rng.choice(moves)
-        if move == 'Add':
+        if self.rng.choice(moves) == 'Add':
             return np.append(current, self.rng.choice(remaining))
-        perturbed = np.delete(current, self.rng.integers(0, len(current)))
-        if move == 'Replace':
-            perturbed = np.append(perturbed, self.rng.choice(remaining))
-        return perturbed
-
-    def next_candidate(self, current):
-        """Neighbour of `current`, preferring subsets that were not visited yet."""
-        candidate = None
-        for _ in range(MAX_NEIGHBOUR_TRIES):
-            candidate = self.perturb(current)
-            if candidate is None:
-                return None
-            if frozenset(candidate.tolist()) not in self.visited:
-                break
-        self.visited.add(frozenset(candidate.tolist()))
-        return candidate
+        return np.delete(current, self.rng.integers(0, len(current)))
 
     def run(self):
         resumed = self.reload_weka_jvm
         if resumed == False:
             start_epoch = 0
-            initial = self.rng.random(self.nFeatures)
+            initial = self.rng.standard_normal(self.nFeatures) > 0
             if SET_MIN_LENGTH == True:
                 initial = self.debug(initial)
-            currentSubset = selected_features(initial)
+            currentSubset = np.where(initial)[0]
             currentFitValue = self.evaluate(currentSubset, self.train_data)
             bestSubset = currentSubset.copy()
             bestFitValue = currentFitValue
             self.temperature = self.initTemp
-            self.visited = {frozenset(currentSubset.tolist())}
         else:
             start_epoch = self.current_generation
             currentSubset = np.array(self.currentSubset)
@@ -306,7 +256,6 @@ class SimulatedAnnealing(Metaheuristic):
             bestSubset = np.array(self.bestSubset)
             bestFitValue = self.bestFitValue
         self.reload_weka_jvm = False
-        _, moves_per_level, alpha = self.cooling_schedule()
         for epoch in range(start_epoch, self.epochs):
             if epoch % MAX_ITERATIONS_JVM_WEKA == 0 and epoch > 1 and resumed == False:
                 self.current_generation = epoch
@@ -318,7 +267,10 @@ class SimulatedAnnealing(Metaheuristic):
                 self.printF('Ask for reload weka jvm')
                 break
             resumed = False
-            candidate = self.next_candidate(currentSubset)
+            if self.temperature < self.min_temp:
+                self.printF(f'Temperature {self.temperature:.2e} below {self.min_temp}. Termination condition met')
+                break
+            candidate = self.perturb(currentSubset)
             if candidate is None:
                 self.printF('No feasible perturbation left. Termination condition met')
                 break
@@ -331,8 +283,7 @@ class SimulatedAnnealing(Metaheuristic):
                         .format(bestFitValue, currentFitValue) + ' - Best subset updated')
                     bestFitValue = currentFitValue
                     bestSubset = currentSubset.copy()
-            if (epoch + 1) % moves_per_level == 0:
-                self.temperature = alpha * self.temperature
+            self.temperature = self.alpha * self.temperature
             parsedSubset = [self.original_indexes[i] for i in bestSubset]
             writterHistoric(f'{self.path_historic}/{self.name}_{self.type_of}.csv', {'epoch': epoch, 'gen': self.epochs, 'subset': str(parsedSubset), 'merit': bestFitValue})
             self.printF(f'Epoch: {epoch}/{self.epochs} - T: {self.temperature:.2e} - Best Score: {bestFitValue} - Length: {len(currentSubset)} - Evals: {self.n_evaluations}')

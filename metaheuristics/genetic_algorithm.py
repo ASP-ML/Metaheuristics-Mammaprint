@@ -10,13 +10,14 @@ natural selection through selection, crossover, and mutation operators.
 
 Algorithm Overview:
 ------------------
-1. Initialize random population of binary chromosomes (feature subsets)
+1. Initialize random population of binary chromosomes (feature subsets) from a
+   Gaussian distribution (a gene is selected when its draw is > 0)
 2. For each generation:
    a. Evaluate fitness of all individuals
    b. Select parents using binary tournament selection
    c. Create offspring through one-point crossover (random cut point)
    d. Apply bit-flip mutation (each gene flips with probability mutationRange)
-   e. Form new population: the elite chromosome plus offspring (constant size)
+   e. The mutated offspring form the new population (constant size)
 3. Return best feature subset found across all generations
 
 Key Features:
@@ -25,7 +26,7 @@ Key Features:
 - Tournament selection for parent selection
 - One-point crossover with a random cut point, two children per pair
 - Per-gene bit-flip mutation
-- Elitism to preserve best solutions
+- The best chromosome found is saved; optional elitism through N_ELITE
 - JVM reload handling for Weka objective functions
 
 References:
@@ -44,8 +45,8 @@ import weka.core.jvm as jvm
 from .base import (Metaheuristic, writterHistoric, stream_key,
                    MAX_ITERATIONS_JVM_WEKA, SET_MIN_LENGTH, MIN_LENGTH_SUBSET)
 
-N_ELITE = 1
-"""Number of best chromosomes copied unchanged into the next generation."""
+N_ELITE = 0
+"""Number of best chromosomes copied unchanged into the next generation (0 = paper: P(t+1) is the mutated offspring)."""
 
 
 class GeneticAlgorithm(Metaheuristic):
@@ -169,7 +170,7 @@ class GeneticAlgorithm(Metaheuristic):
     def initialize(self):
         self.name = 'GA'
         self.length_chromosome = self.data.shape[1]
-        population = self.rng.random((self.population_size, self.length_chromosome)) >= 0.5
+        population = self.rng.standard_normal((self.population_size, self.length_chromosome)) > 0
         if SET_MIN_LENGTH == True:
            population = self.debug(population)
         self.population = population
@@ -272,7 +273,7 @@ class GeneticAlgorithm(Metaheuristic):
             offspring = self.mutation(popAfterCross)
             if SET_MIN_LENGTH == True:
                 offspring = self.debug(offspring)
-            # Elitism: the best chromosome so far survives unchanged
+            # With N_ELITE > 0 the best chromosome so far survives unchanged (elitism)
             self.population = np.vstack([np.tile(bestSubset, (N_ELITE, 1)), offspring])
             tempo += 1
             parsedSubset = [self.original_indexes[i] for i in np.where(bestSubset)[0]]

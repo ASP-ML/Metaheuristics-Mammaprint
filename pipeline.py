@@ -48,66 +48,67 @@ def run_experiment_using_weka(mh_dict,
                 futures.append(future)
                 futures_wrapper.append(ExecutorWrapper(executor, future))
                 process_assigned += 1
-                results_futures = []
-                completed_all = False
-                while experiment.checkMetaheuristicStates(mh_dict) == False:
-                    done, pending = concurrent.futures.wait(futures, timeout=None, return_when='FIRST_COMPLETED')
-                    for future in done:
-                        params = future.result()
-                        index_future = futures.index(future)
-                        futures.pop(index_future)
-                        futures_wrapper[index_future].stopExecutor()
-                        futures_wrapper.pop(index_future)
-                        key_index = params['name'] + '_' + params['of_name']
-                        if params['reload_weka_jvm'] == True:
-                            executor = concurrent.futures.ProcessPoolExecutor(max_workers=1, mp_context=ctx)
-                            mh_dict[key_index].metaheuristic.setParams(params)
-                            future = executor.submit(mh_dict[key_index].metaheuristic.runProcess)
-                            futures.append(future)
-                            time.sleep(15)
-                            futures_wrapper.append(ExecutorWrapper(executor, future))
-                        else:
-                            results_futures.append(params)
-                            mh_dict[key_index].setDone(True)
-                        gc.collect()
-                    #Check remaining metas
-                    executors_free = NUMBER_EXECUTORS - len(futures)
-                    print(f'> Step {i + 1}-({gen}/{END_GEN}): Futures availables: {executors_free}/{NUMBER_EXECUTORS}')
-                    print(f'> Step {i + 1}-({gen}/{END_GEN}): Process assigned: {process_assigned}/{total_process}')
-                    if process_assigned == (total_process):
-                        completed_all = True
-                    if completed_all == False and executors_free > 0:
-                        remaining_mh = []
-                        for mh in mh_dict:
-                            if mh_dict[mh].processAssigned() == False:
-                                remaining_mh.append(mh_dict[mh])
-                        print(f'> Step {i + 1}-({gen}/{END_GEN}): Remaning mhs evaluation: {total_process - len(remaining_mh)}/{total_process}')
-                        for free, mh in zip(list(range(executors_free)), remaining_mh):
-                            executor = concurrent.futures.ProcessPoolExecutor(max_workers=1, mp_context=ctx)
-                            meta = mh.metaheuristic
-                            mh.setProcessAssigned(True)
-                            future = executor.submit(meta.runProcess)
-                            time.sleep(10)
-                            futures.append(future)
-                            futures_wrapper.append(ExecutorWrapper(executor, future))
-                            process_assigned += 1
-                        print(f'> Step {i + 1}-({gen}/{END_GEN}): Updated mhs evaluation: {total_process - len(remaining_mh)}/{total_process}')
-                    time.sleep(5)
-                print(f'>> Got {len(results_futures)} results')
-                for params in results_futures:
-                    experiment.addDataByMeta(params, i)
-                n_run += 1
-                for key in mh_dict:
-                    mh_dict[key].metaheuristic.set_new_iterations(n_run * STEP_GEN)
-                    mh_dict[key].setDone(False)
-                    mh_dict[key].setProcessAssigned(False)
-                print(f">>> Finish Epoch experiment: {gen}/{END_GEN}")
-            total_historic = experiment.getHistoricByStep(i)
-            total_historic.to_csv(f'{base_path}/total_history_{i + 1}_report.csv')
-            historic_by_step, historic_by_step_df = experiment.getBestByObjectiveFunction(i, get_df=True)
-            report_generated_list_path.append(f'{base_path}/step_{i + 1}_report.csv')
-            historic_by_step_df.to_csv(len(report_generated_list_path) - 1, index = False)
-            mh_dict = getMetasByObjectiveFunction(data,labels, METAS_EXPERIMENT, OBJECTIVE_FUNCTIONS, FIRST_GEN, historic_by_step, path_report=historic_path)
+            results_futures = []
+            completed_all = False
+            while experiment.checkMetaheuristicStates(mh_dict) == False:
+                done, pending = concurrent.futures.wait(futures, timeout=None, return_when='FIRST_COMPLETED')
+                for future in done:
+                    params = future.result()
+                    index_future = futures.index(future)
+                    futures.pop(index_future)
+                    futures_wrapper[index_future].stopExecutor()
+                    futures_wrapper.pop(index_future)
+                    key_index = params['name'] + '_' + params['of_name']
+                    if params['reload_weka_jvm'] == True:
+                        executor = concurrent.futures.ProcessPoolExecutor(max_workers=1, mp_context=ctx)
+                        mh_dict[key_index].metaheuristic.setParams(params)
+                        future = executor.submit(mh_dict[key_index].metaheuristic.runProcess)
+                        futures.append(future)
+                        time.sleep(15)
+                        futures_wrapper.append(ExecutorWrapper(executor, future))
+                    else:
+                        results_futures.append(params)
+                        mh_dict[key_index].setDone(True)
+                    gc.collect()
+                #Check remaining metas
+                executors_free = NUMBER_EXECUTORS - len(futures)
+                print(f'> Step {i + 1}-({gen}/{END_GEN}): Futures availables: {executors_free}/{NUMBER_EXECUTORS}')
+                print(f'> Step {i + 1}-({gen}/{END_GEN}): Process assigned: {process_assigned}/{total_process}')
+                if process_assigned == (total_process):
+                    completed_all = True
+                if completed_all == False and executors_free > 0:
+                    remaining_mh = []
+                    for mh in mh_dict:
+                        if mh_dict[mh].processAssigned() == False:
+                            remaining_mh.append(mh_dict[mh])
+                    print(f'> Step {i + 1}-({gen}/{END_GEN}): Remaning mhs evaluation: {total_process - len(remaining_mh)}/{total_process}')
+                    for free, mh in zip(list(range(executors_free)), remaining_mh):
+                        executor = concurrent.futures.ProcessPoolExecutor(max_workers=1, mp_context=ctx)
+                        meta = mh.metaheuristic
+                        mh.setProcessAssigned(True)
+                        future = executor.submit(meta.runProcess)
+                        time.sleep(10)
+                        futures.append(future)
+                        futures_wrapper.append(ExecutorWrapper(executor, future))
+                        process_assigned += 1
+                    print(f'> Step {i + 1}-({gen}/{END_GEN}): Updated mhs evaluation: {total_process - len(remaining_mh)}/{total_process}')
+                time.sleep(5)
+            print(f'>> Got {len(results_futures)} results')
+            for params in results_futures:
+                experiment.addDataByMeta(params, i)
+            n_run += 1
+            for key in mh_dict:
+                mh_dict[key].metaheuristic.set_new_iterations(n_run * STEP_GEN)
+                mh_dict[key].setDone(False)
+                mh_dict[key].setProcessAssigned(False)
+            print(f">>> Finish Epoch experiment: {gen}/{END_GEN}")
+        # End of the round (Algorithm 1, lines 10-11): the next round searches the best subset found
+        total_historic = experiment.getHistoricByStep(i)
+        total_historic.to_csv(f'{base_path}/total_history_{i + 1}_report.csv')
+        historic_by_step, historic_by_step_df = experiment.getBestByObjectiveFunction(i, get_df=True)
+        report_generated_list_path.append(f'{base_path}/step_{i + 1}_report.csv')
+        historic_by_step_df.to_csv(report_generated_list_path[-1], index = False)
+        mh_dict = getMetasByObjectiveFunction(data,labels, METAS_EXPERIMENT, OBJECTIVE_FUNCTIONS, FIRST_GEN, historic_by_step, path_report=historic_path)
     return report_generated_list_path
 
     

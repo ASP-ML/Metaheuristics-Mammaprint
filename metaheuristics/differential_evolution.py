@@ -241,6 +241,8 @@ class DifferentialEvolution(Metaheuristic):
                 self.printF('Ask for reload weka jvm')
                 break
             resumed = False
+            # Trials are built from generation G; the survivors form generation G + 1
+            next_pop = self.pop.copy()
             for chromosome in range(self.pop_size):
                 # Choose three candidates a, b and c that are not the current one
                 candidates = [candidate for candidate in range(self.pop_size) if candidate != chromosome]
@@ -254,8 +256,9 @@ class DifferentialEvolution(Metaheuristic):
                 # The target fitness is already stored in obj_all (the objective is deterministic)
                 objTrial = self.evaluate(trial_features, self.train_data)
                 if objTrial > obj_all[chromosome]:
-                    self.pop[chromosome] = trial
+                    next_pop[chromosome] = trial
                     obj_all[chromosome] = objTrial
+            self.pop = next_pop
             best_index = int(np.argmax(obj_all))
             if obj_all[best_index] > bestObjValue:
                 bestObjValue = obj_all[best_index]
