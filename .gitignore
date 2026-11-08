@@ -3,3 +3,4 @@ classifiers_results/
 resumes/
 __pycache__/
 docs/
+.venv/
