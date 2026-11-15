@@ -1,0 +1,16 @@
+Meta,OF,IT,Subset,Length,Settings,Classifier
+DE,chi2,250,"[11, 14, 38, 49, 50, 52, 58, 63, 65, 67]",10,Pop: 35 N features: 70 MF: 0.5 COF: 0.45,RF estimators: 100
+DE,gain_ratio,100,"[14, 21, 33, 34, 42, 44, 50, 58, 63, 65]",10,Pop: 35 N features: 70 MF: 0.5 COF: 0.45,RF estimators: 60
+DE,mi,100,"[3, 9, 10, 50, 52, 57, 59, 63, 65, 67]",10,Pop: 35 N features: 70 MF: 0.5 COF: 0.45,Naive
+DE,relieff,50,"[2, 6, 9, 16, 18, 20, 22, 23, 24, 28, 32, 37, 38, 48, 49, 50, 57, 62]",18,Pop: 35 N features: 18 MF: 0.5 COF: 0.45,Knn k = 3
+DE,sim_uncertainty,100,"[9, 11, 14, 21, 42, 44, 50, 58, 63, 65]",10,Pop: 35 N features: 70 MF: 0.5 COF: 0.45,RF estimators: 60
+GA,chi2,250,"[9, 11, 19, 38, 44, 50, 52, 58, 63, 67]",10,Pop: 35 LC: 14 MR: 0.2 NP: 20,SVM (Poly)
+GA,gain_ratio,100,"[15, 16, 33, 34, 42, 43, 44, 63, 65, 67]",10,Pop: 35 LC: 12 MR: 0.2 NP: 20,RF estimators: 80
+GA,mi,100,"[3, 7, 9, 32, 50, 52, 59, 63, 67, 69]",10,Pop: 35 LC: 12 MR: 0.2 NP: 20,RF estimators: 60
+GA,relieff,100,"[2, 6, 20, 22, 28, 37, 38, 49, 50, 57, 67]",11,Pop: 35 LC: 14 MR: 0.2 NP: 20,Knn k = 3
+GA,sim_uncertainty,50,"[12, 19, 33, 34, 42, 50, 51, 63, 65, 67]",10,Pop: 35 LC: 11 MR: 0.2 NP: 20,RF estimators: 80
+SA,chi2,400,"[12, 22, 44, 58, 63, 67, 50, 9, 19, 37]",10,T0: 25.6 N features: 12 Alpha: 0.8,RF estimators: 100
+SA,gain_ratio,450,"[50, 5, 12, 18, 44, 34, 38, 33, 21, 54]",10,T0: 0.0008920298079412271 N features: 14 Alpha: 0.8,RF estimators: 80
+SA,mi,350,"[16, 69, 50, 37, 65, 45, 7, 67, 2, 3]",10,T0: 4.294967296000002 N features: 12 Alpha: 0.8,RF estimators: 100
+SA,relieff,50,"[16, 24, 32, 57, 2, 41, 28, 63, 37, 52]",10,T0: 0.0008920298079412271 N features: 20 Alpha: 0.8,Knn k = 5
+SA,sim_uncertainty,100,"[34, 59, 37, 21, 69, 43, 50, 14, 67, 42]",10,T0: 0.0008920298079412271 N features: 29 Alpha:,RF estimators: 60

@@ -1,0 +1,30 @@
+\begin{table}[!ht]
+\small
+\caption{Comparison of the proposed classification scheme, the whole set of 70 genes and the clinical criteria MammaPrint, NIH and St. Gallen on the hold-out test set ($N = 30$: 10 positive and 20 negative patients).}
+\centering
+\label{clinicalComparison}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc}
+\hline
+ & Proposed (DE--aSU) & Whole set ($L = 70$) & MammaPrint & NIH & St. Gallen \\
+Metric & RF (t=60) & RF (t=60) &  &  &  \\
+\hline
+TP & $10$ & $8$ & $9$ & $10$ & $10$ \\
+TN & $17$ & $15$ & $7$ & $1$ & $0$ \\
+FP & $3$ & $5$ & $13$ & $19$ & $20$ \\
+FN & $0$ & $2$ & $1$ & $0$ & $0$ \\
+\hline
+ACC & $\mathbf{0.90}$ & $0.77$ & $0.53$ & $0.37$ & $0.33$ \\
+Sn & $\mathbf{1.00}$ & $0.80$ & $0.90$ & $\mathbf{1.00}$ & $\mathbf{1.00}$ \\
+Sp & $\mathbf{0.85}$ & $0.75$ & $0.35$ & $0.05$ & $0.00$ \\
+PRE & $\mathbf{0.77}$ & $0.62$ & $0.41$ & $0.34$ & $0.33$ \\
+NPV & $\mathbf{1.00}$ & $0.88$ & $0.88$ & $\mathbf{1.00}$ & n.d.$^{a}$ \\
+F1-score & $\mathbf{0.87}$ & $0.70$ & $0.56$ & $0.51$ & $0.50$ \\
+BACC & $\mathbf{0.93}$ & $0.78$ & $0.63$ & $0.53$ & $0.50$ \\
+MCC & $\mathbf{0.81}$ & $0.52$ & $0.27$ & $0.13$ & n.d.$^{b}$ \\
+\hline
+\multicolumn{6}{l}{\footnotesize $^{a}$Not defined: no patient is predicted negative (TN + FN = 0).} \\
+\multicolumn{6}{l}{\footnotesize $^{b}$Not defined: all patients are predicted in the same class.} \\
+\end{tabular}
+}
+\end{table}
