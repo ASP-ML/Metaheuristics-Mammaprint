@@ -2,7 +2,7 @@
 Top-k Filter-Ranking Baseline
 =============================
 
-Deterministic baseline asked for in editor comment E.4: score every gene once with
+Deterministic baseline: score every gene once with
 the same per-feature score Omega_i that the metaheuristics average in Eq. (11), and
 keep the k best.
 
@@ -109,7 +109,7 @@ class TopKFilter(SelectorMixin, BaseEstimator):
     Keep the k top-ranked columns, with scores learned in fit only.
 
     Placed after scaling and SMOTE in a CV pipeline, the ranking is learned from
-    the training part of each fold (E.4, variant 4.2b).
+    the training part of each fold.
 
     Parameters:
     ----------

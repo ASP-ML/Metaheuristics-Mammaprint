@@ -1,5 +1,5 @@
 """
-Tests for the top-k filter-ranking baseline (editor comment E.4).
+Tests for the top-k filter-ranking baseline.
 
 The unit tests replace the objective function, so they run without Weka.
 The integration tests need a JVM (set JAVA_HOME) and use data/train_normal_rtf.csv.

@@ -251,7 +251,9 @@ if __name__ == "__main__":
     HISTORY_FILE = 'statistic_test/results/lasso_full_history.csv'
     SUBSET_FILES = [
         '/mnt/Cris-SW/Research/MetaheuristicExperiment/experiment_results/R3/class_step_3_report_train_normal_rtf.csv',
-        'results/top10_baseline/top10_subsets.csv',
+        # Top-10 filter rankings (Meta = TOP10), written by top10_ranking_vs_mh.ipynb (stage 1). Only the columns
+        # Meta, OF and Subset are read. Here they are comparators that get their own classifier from the CV results.
+        'experiment_results/top10_ranking_vs_mh/top10_subsets.csv',
     ]
     OUTPUT_DIR = 'results/model_selection_preview'
 
