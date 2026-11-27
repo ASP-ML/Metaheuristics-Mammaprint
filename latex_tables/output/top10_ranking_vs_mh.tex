@@ -1,0 +1,49 @@
+\begin{table}[!ht]
+\linespread{1}\selectfont
+\centering
+\small
+\caption{\textcolor{blue}{Exploratory comparison on the same 30 real test patients (10 positive and 20 negative) of each finalist with its metaheuristic signature (MH) and with the top-10 ranking of the same objective (Top-10), keeping the classifier and its parameters. 95\% confidence intervals: percentile bootstrap stratified by class for the F1-score; Wilson score interval for Sn, Sp and ACC.}}
+\label{tableTop10RankingVsMH}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llllcccc}
+\hline
+\textcolor{blue}{Scheme} & \textcolor{blue}{Classifier} & \textcolor{blue}{Signature} & \textcolor{blue}{L} & \textcolor{blue}{F1-score} & \textcolor{blue}{Sn} & \textcolor{blue}{Sp} & \textcolor{blue}{ACC} \\
+ &  &  &  & \textcolor{blue}{[95\% CI]} & \textcolor{blue}{[95\% CI]} & \textcolor{blue}{[95\% CI]} & \textcolor{blue}{[95\% CI]} \\
+\hline
+\textcolor{blue}{DE--aMI} & \textcolor{blue}{NB} & \textcolor{blue}{MH} & \textcolor{blue}{10} & \textcolor{blue}{0.58 [0.45, 0.69]} & \textcolor{blue}{0.90 [0.60, 0.98]} & \textcolor{blue}{0.40 [0.22, 0.61]} & \textcolor{blue}{0.57 [0.39, 0.73]} \\
+ &  & \textcolor{blue}{Top-10} & \textcolor{blue}{10} & \textcolor{blue}{0.48 [0.30, 0.64]} & \textcolor{blue}{0.70 [0.40, 0.89]} & \textcolor{blue}{0.40 [0.22, 0.61]} & \textcolor{blue}{0.50 [0.33, 0.67]} \\
+\textcolor{blue}{DE--aSU} & \textcolor{blue}{RF ($t=60$)} & \textcolor{blue}{MH} & \textcolor{blue}{10} & \textcolor{blue}{0.87 [0.77, 1.00]} & \textcolor{blue}{1.00 [0.72, 1.00]} & \textcolor{blue}{0.85 [0.64, 0.95]} & \textcolor{blue}{0.90 [0.74, 0.97]} \\
+ &  & \textcolor{blue}{Top-10$^{a}$} & \textcolor{blue}{10} & \textcolor{blue}{0.57 [0.32, 0.78]} & \textcolor{blue}{0.60 [0.31, 0.83]} & \textcolor{blue}{0.75 [0.53, 0.89]} & \textcolor{blue}{0.70 [0.52, 0.83]} \\
+\textcolor{blue}{DE--aGR} & \textcolor{blue}{RF ($t=60$)} & \textcolor{blue}{MH} & \textcolor{blue}{10} & \textcolor{blue}{0.74 [0.65, 0.87]} & \textcolor{blue}{1.00 [0.72, 1.00]} & \textcolor{blue}{0.65 [0.43, 0.82]} & \textcolor{blue}{0.77 [0.59, 0.88]} \\
+ &  & \textcolor{blue}{Top-10$^{\dagger}$} & \textcolor{blue}{10} & \textcolor{blue}{0.74 [0.65, 0.87]} & \textcolor{blue}{1.00 [0.72, 1.00]} & \textcolor{blue}{0.65 [0.43, 0.82]} & \textcolor{blue}{0.77 [0.59, 0.88]} \\
+\textcolor{blue}{DE--aReliefF} & \textcolor{blue}{kNN ($k=3$)} & \textcolor{blue}{MH} & \textcolor{blue}{18} & \textcolor{blue}{0.72 [0.57, 0.87]} & \textcolor{blue}{0.90 [0.60, 0.98]} & \textcolor{blue}{0.70 [0.48, 0.85]} & \textcolor{blue}{0.77 [0.59, 0.88]} \\
+ &  & \textcolor{blue}{Top-10$^{b}$} & \textcolor{blue}{10} & \textcolor{blue}{0.67 [0.52, 0.80]} & \textcolor{blue}{0.90 [0.60, 0.98]} & \textcolor{blue}{0.60 [0.39, 0.78]} & \textcolor{blue}{0.70 [0.52, 0.83]} \\
+\textcolor{blue}{DE--aCHI2} & \textcolor{blue}{RF ($t=100$)} & \textcolor{blue}{MH} & \textcolor{blue}{10} & \textcolor{blue}{0.69 [0.54, 0.83]} & \textcolor{blue}{0.90 [0.60, 0.98]} & \textcolor{blue}{0.65 [0.43, 0.82]} & \textcolor{blue}{0.73 [0.56, 0.86]} \\
+ &  & \textcolor{blue}{Top-10$^{c}$} & \textcolor{blue}{10} & \textcolor{blue}{0.56 [0.35, 0.75]} & \textcolor{blue}{0.70 [0.40, 0.89]} & \textcolor{blue}{0.60 [0.39, 0.78]} & \textcolor{blue}{0.63 [0.46, 0.78]} \\
+\hline
+\textcolor{blue}{GA--aMI} & \textcolor{blue}{RF ($t=60$)} & \textcolor{blue}{MH} & \textcolor{blue}{10} & \textcolor{blue}{0.48 [0.21, 0.70]} & \textcolor{blue}{0.50 [0.24, 0.76]} & \textcolor{blue}{0.70 [0.48, 0.85]} & \textcolor{blue}{0.63 [0.46, 0.78]} \\
+ &  & \textcolor{blue}{Top-10} & \textcolor{blue}{10} & \textcolor{blue}{0.64 [0.45, 0.82]} & \textcolor{blue}{0.80 [0.49, 0.94]} & \textcolor{blue}{0.65 [0.43, 0.82]} & \textcolor{blue}{0.70 [0.52, 0.83]} \\
+\textcolor{blue}{GA--aSU} & \textcolor{blue}{RF ($t=80$)} & \textcolor{blue}{MH} & \textcolor{blue}{10} & \textcolor{blue}{0.67 [0.48, 0.83]} & \textcolor{blue}{0.80 [0.49, 0.94]} & \textcolor{blue}{0.70 [0.48, 0.85]} & \textcolor{blue}{0.73 [0.56, 0.86]} \\
+ &  & \textcolor{blue}{Top-10} & \textcolor{blue}{10} & \textcolor{blue}{0.55 [0.30, 0.76]} & \textcolor{blue}{0.60 [0.31, 0.83]} & \textcolor{blue}{0.70 [0.48, 0.85]} & \textcolor{blue}{0.67 [0.49, 0.81]} \\
+\textcolor{blue}{GA--aGR} & \textcolor{blue}{RF ($t=80$)} & \textcolor{blue}{MH} & \textcolor{blue}{10} & \textcolor{blue}{0.52 [0.29, 0.73]} & \textcolor{blue}{0.60 [0.31, 0.83]} & \textcolor{blue}{0.65 [0.43, 0.82]} & \textcolor{blue}{0.63 [0.46, 0.78]} \\
+ &  & \textcolor{blue}{Top-10$^{d}$} & \textcolor{blue}{10} & \textcolor{blue}{0.77 [0.67, 0.91]} & \textcolor{blue}{1.00 [0.72, 1.00]} & \textcolor{blue}{0.70 [0.48, 0.85]} & \textcolor{blue}{0.80 [0.63, 0.90]} \\
+\textcolor{blue}{GA--aReliefF} & \textcolor{blue}{kNN ($k=3$)} & \textcolor{blue}{MH} & \textcolor{blue}{11} & \textcolor{blue}{0.77 [0.67, 0.91]} & \textcolor{blue}{1.00 [0.72, 1.00]} & \textcolor{blue}{0.70 [0.48, 0.85]} & \textcolor{blue}{0.80 [0.63, 0.90]} \\
+ &  & \textcolor{blue}{Top-10$^{b}$} & \textcolor{blue}{10} & \textcolor{blue}{0.67 [0.52, 0.80]} & \textcolor{blue}{0.90 [0.60, 0.98]} & \textcolor{blue}{0.60 [0.39, 0.78]} & \textcolor{blue}{0.70 [0.52, 0.83]} \\
+\textcolor{blue}{GA--aCHI2} & \textcolor{blue}{SVM (Poly)} & \textcolor{blue}{MH} & \textcolor{blue}{10} & \textcolor{blue}{0.54 [0.33, 0.72]} & \textcolor{blue}{0.70 [0.40, 0.89]} & \textcolor{blue}{0.55 [0.34, 0.74]} & \textcolor{blue}{0.60 [0.42, 0.75]} \\
+ &  & \textcolor{blue}{Top-10} & \textcolor{blue}{10} & \textcolor{blue}{0.50 [0.31, 0.67]} & \textcolor{blue}{0.70 [0.40, 0.89]} & \textcolor{blue}{0.45 [0.26, 0.66]} & \textcolor{blue}{0.53 [0.36, 0.70]} \\
+\hline
+\textcolor{blue}{SA--aMI} & \textcolor{blue}{RF ($t=100$)} & \textcolor{blue}{MH} & \textcolor{blue}{10} & \textcolor{blue}{0.52 [0.32, 0.69]} & \textcolor{blue}{0.70 [0.40, 0.89]} & \textcolor{blue}{0.50 [0.30, 0.70]} & \textcolor{blue}{0.57 [0.39, 0.73]} \\
+ &  & \textcolor{blue}{Top-10} & \textcolor{blue}{10} & \textcolor{blue}{0.62 [0.43, 0.78]} & \textcolor{blue}{0.80 [0.49, 0.94]} & \textcolor{blue}{0.60 [0.39, 0.78]} & \textcolor{blue}{0.67 [0.49, 0.81]} \\
+\textcolor{blue}{SA--aSU} & \textcolor{blue}{RF ($t=60$)} & \textcolor{blue}{MH} & \textcolor{blue}{10} & \textcolor{blue}{0.55 [0.30, 0.76]} & \textcolor{blue}{0.60 [0.31, 0.83]} & \textcolor{blue}{0.70 [0.48, 0.85]} & \textcolor{blue}{0.67 [0.49, 0.81]} \\
+ &  & \textcolor{blue}{Top-10$^{a}$} & \textcolor{blue}{10} & \textcolor{blue}{0.57 [0.32, 0.78]} & \textcolor{blue}{0.60 [0.31, 0.83]} & \textcolor{blue}{0.75 [0.53, 0.89]} & \textcolor{blue}{0.70 [0.52, 0.83]} \\
+\textcolor{blue}{SA--aGR} & \textcolor{blue}{RF ($t=80$)} & \textcolor{blue}{MH} & \textcolor{blue}{10} & \textcolor{blue}{0.42 [0.18, 0.63]} & \textcolor{blue}{0.50 [0.24, 0.76]} & \textcolor{blue}{0.55 [0.34, 0.74]} & \textcolor{blue}{0.53 [0.36, 0.70]} \\
+ &  & \textcolor{blue}{Top-10$^{d}$} & \textcolor{blue}{10} & \textcolor{blue}{0.77 [0.67, 0.91]} & \textcolor{blue}{1.00 [0.72, 1.00]} & \textcolor{blue}{0.70 [0.48, 0.85]} & \textcolor{blue}{0.80 [0.63, 0.90]} \\
+\textcolor{blue}{SA--aReliefF} & \textcolor{blue}{kNN ($k=5$)} & \textcolor{blue}{MH} & \textcolor{blue}{10} & \textcolor{blue}{0.69 [0.61, 0.80]} & \textcolor{blue}{1.00 [0.72, 1.00]} & \textcolor{blue}{0.55 [0.34, 0.74]} & \textcolor{blue}{0.70 [0.52, 0.83]} \\
+ &  & \textcolor{blue}{Top-10} & \textcolor{blue}{10} & \textcolor{blue}{0.64 [0.50, 0.78]} & \textcolor{blue}{0.90 [0.60, 0.98]} & \textcolor{blue}{0.55 [0.34, 0.74]} & \textcolor{blue}{0.67 [0.49, 0.81]} \\
+\textcolor{blue}{SA--aCHI2} & \textcolor{blue}{RF ($t=100$)} & \textcolor{blue}{MH} & \textcolor{blue}{10} & \textcolor{blue}{0.58 [0.37, 0.77]} & \textcolor{blue}{0.70 [0.40, 0.89]} & \textcolor{blue}{0.65 [0.43, 0.82]} & \textcolor{blue}{0.67 [0.49, 0.81]} \\
+ &  & \textcolor{blue}{Top-10$^{c}$} & \textcolor{blue}{10} & \textcolor{blue}{0.56 [0.35, 0.75]} & \textcolor{blue}{0.70 [0.40, 0.89]} & \textcolor{blue}{0.60 [0.39, 0.78]} & \textcolor{blue}{0.63 [0.46, 0.78]} \\
+\hline
+\end{tabular}}
+\par\smallskip
+\parbox{\textwidth}{\footnotesize\textcolor{blue}{MH: metaheuristic signature. Top-10: the 10 best-ranked genes of the same objective on the training partition, with the same classifier and parameters. L: number of genes. Values with 95\% confidence intervals. $^{a}$ Same model in DE--aSU and SA--aSU: same top-10 genes, classifier and parameters, trained and tested once. $^{b}$ Same model in DE--aReliefF and GA--aReliefF: same top-10 genes, classifier and parameters, trained and tested once. $^{c}$ Same model in DE--aCHI2 and SA--aCHI2: same top-10 genes, classifier and parameters, trained and tested once. $^{d}$ Same model in GA--aGR and SA--aGR: same top-10 genes, classifier and parameters, trained and tested once. $^{\dagger}$ The top-10 genes are the metaheuristic signature: both rows are the same model.}}
+\end{table}

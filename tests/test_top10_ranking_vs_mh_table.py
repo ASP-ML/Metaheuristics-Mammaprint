@@ -25,9 +25,21 @@ def pair(number, meta, of, classifier, top10_model=None, same_as_mh=False, mh_le
             row(number, meta, of, classifier, 'TOP10', top10_model or f'TOP10-{of}-{classifier}', same_as_mh=same_as_mh)]
 
 
+def table_of(rows, color=None):
+    return build_table(rows, caption='C', label='L', color=color)
+
+
+def body_lines(table):
+    """The rows of the tabular between the header and the end, without \\hline."""
+    lines = table.splitlines()
+    start = lines.index('\\hline', lines.index('\\hline') + 1) + 1
+    end = lines.index('\\end{tabular}}')
+    return [line for line in lines[start:end] if line != '\\hline']
+
+
 def test_classifier_labels_follow_the_manuscript():
-    assert classifier_label('RF estimators: 60') == 'RF (t=60)'
-    assert classifier_label('Knn k = 3') == 'kNN (k=3)'
+    assert classifier_label('RF estimators: 60') == 'RF ($t=60$)'
+    assert classifier_label('Knn k = 3') == 'kNN ($k=3$)'
     assert classifier_label('Naive') == 'NB'
     assert classifier_label('SVM (Poly)') == 'SVM (Poly)'
 
@@ -37,52 +49,69 @@ def test_values_are_printed_with_their_interval_rounded_half_up():
     assert format_ci(0.625, 0.3049, 0.875) == '0.63 [0.30, 0.88]'
 
 
-def test_each_pair_spans_two_rows_that_cannot_be_split_across_pages():
-    table = build_table(pair(1, 'DE', 'mi', 'Naive'), caption='C', label='L')
-    lines = [line for line in table.splitlines() if 'Naive' in line or ' & & & ' in line or 'NB' in line]
-    mh, top = lines[0], lines[1]
-    assert '\\multirow{2}{*}{DE}' in mh and '\\multirow{2}{*}{aMI}' in mh and '\\multirow{2}{*}{NB}' in mh
-    assert mh.rstrip().endswith('\\\\*')          # no page break between the two rows of a pair
-    assert top.startswith(' & & & Top-10')
+def test_the_table_is_a_float_scaled_to_the_text_width_like_the_other_tables():
+    table = table_of(pair(1, 'DE', 'mi', 'Naive'))
+    assert table.startswith('\\begin{table}[!ht]')
+    assert '\\resizebox{\\textwidth}{!}{%' in table and '\\begin{tabular}{llllcccc}' in table
+    assert '\\caption{C}' in table and '\\label{L}' in table
+    assert table.rstrip().endswith('\\end{table}')
+    # Only standard LaTeX: no longtable or multirow packages needed
+    assert 'longtable' not in table and '\\multirow' not in table
 
 
-def test_the_header_is_repeated_on_every_page():
-    table = build_table(pair(1, 'DE', 'mi', 'Naive'), caption='C', label='L')
-    assert '\\begin{longtable}' in table and '\\endfirsthead' in table and '\\endhead' in table
-    assert table.count('Signature & L & F1') == 2
+def test_each_pair_is_two_consecutive_rows_named_once():
+    mh, top = body_lines(table_of(pair(1, 'DE', 'mi', 'Naive')))
+    assert mh.startswith('DE--aMI & NB & MH & 10 &')
+    assert top.startswith(' &  & Top-10 & 10 &')
 
 
-def test_rows_follow_the_manuscript_order_of_metaheuristics_and_objectives():
+def test_genes_and_metrics_are_printed_for_both_rows():
+    mh, top = body_lines(table_of(pair(1, 'DE', 'relieff', 'Knn k = 3', mh_length=18)))
+    assert mh == 'DE--aReliefF & kNN ($k=3$) & MH & 18 & 0.80 [0.70, 0.90] & 0.80 [0.70, 0.90] & 0.80 [0.70, 0.90] & 0.80 [0.70, 0.90] \\\\'
+    assert top.endswith('& Top-10 & 10 & 0.50 [0.40, 0.60] & 0.50 [0.40, 0.60] & 0.50 [0.40, 0.60] & 0.50 [0.40, 0.60] \\\\')
+
+
+def test_rows_follow_the_manuscript_order_and_metaheuristics_are_separated_by_a_line():
     rows = pair(2, 'GA', 'mi', 'Naive') + pair(1, 'DE', 'chi2', 'Naive') + pair(3, 'DE', 'mi', 'Naive')
-    table = build_table(rows, caption='C', label='L')
-    order = [table.index(text) for text in ('{DE} & \\multirow{2}{*}{aMI}', '{DE} & \\multirow{2}{*}{aCHI2}',
-                                            '{GA} & \\multirow{2}{*}{aMI}')]
+    table = table_of(rows)
+    order = [table.index(name) for name in ('DE--aMI &', 'DE--aCHI2 &', 'GA--aMI &')]
     assert order == sorted(order)
+    between_de_and_ga = table[table.index('DE--aCHI2 &'):table.index('GA--aMI &')]
+    between_de_pairs = table[table.index('DE--aMI &'):table.index('DE--aCHI2 &')]
+    assert '\\hline' in between_de_and_ga and '\\hline' not in between_de_pairs
 
 
 def test_a_top10_model_shared_by_several_pairs_is_marked_and_explained():
     rows = (pair(1, 'DE', 'chi2', 'RF estimators: 100', top10_model='TOP10-chi2-RF')
             + pair(2, 'SA', 'chi2', 'RF estimators: 100', top10_model='TOP10-chi2-RF'))
-    table = build_table(rows, caption='C', label='L')
+    table = table_of(rows)
     assert table.count('Top-10$^{a}$') == 2
-    assert '$^{a}$ Same model in DE + aCHI2 and SA + aCHI2' in table
+    assert '$^{a}$ Same model in DE--aCHI2 and SA--aCHI2' in table
 
 
 def test_a_top10_equal_to_the_signature_is_marked_and_explained():
-    table = build_table(pair(1, 'DE', 'gain_ratio', 'RF estimators: 60', same_as_mh=True), caption='C', label='L')
+    table = table_of(pair(1, 'DE', 'gain_ratio', 'RF estimators: 60', same_as_mh=True))
     assert 'Top-10$^{\\dagger}$' in table
     assert '$^{\\dagger}$ The top-10 genes are the metaheuristic signature' in table
 
 
-def test_genes_and_metrics_are_printed_for_both_rows():
-    table = build_table(pair(1, 'DE', 'relieff', 'Knn k = 3', mh_length=18), caption='C', label='L')
-    assert '& MH & 18 & 0.80 [0.70, 0.90]' in table
-    assert '& Top-10 & 10 & 0.50 [0.40, 0.60]' in table
+def test_notes_go_in_a_box_under_the_table():
+    table = table_of(pair(1, 'DE', 'mi', 'Naive'))
+    assert table.index('\\end{tabular}}') < table.index('\\parbox{\\textwidth}{\\footnotesize')
+
+
+def test_text_can_be_coloured():
+    table = table_of(pair(1, 'DE', 'mi', 'Naive'), color='blue')
+    assert '\\caption{\\textcolor{blue}{C}}' in table
+    mh, top = body_lines(table)
+    assert mh.startswith('\\textcolor{blue}{DE--aMI} & \\textcolor{blue}{NB} & \\textcolor{blue}{MH}')
+    assert top.startswith(' &  & \\textcolor{blue}{Top-10}')
+    assert '\\footnotesize\\textcolor{blue}{' in table
 
 
 def test_a_pair_without_both_signatures_stops_the_script():
-    with pytest.raises(ValueError, match='DE \\+ aMI'):
-        build_table(pair(1, 'DE', 'mi', 'Naive')[:1], caption='C', label='L')
+    with pytest.raises(ValueError, match='DE--aMI'):
+        table_of(pair(1, 'DE', 'mi', 'Naive')[:1])
 
 
 def test_run_reads_the_metrics_file_and_writes_the_table(tmp_path):
@@ -92,7 +121,7 @@ def test_run_reads_the_metrics_file_and_writes_the_table(tmp_path):
         writer = csv.DictWriter(file, fieldnames=list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
-    run(str(metrics_file), str(output_file), caption='Caption text', label='tableTop10')
+    run(str(metrics_file), str(output_file), caption='Caption text', label='tableTop10', color=None)
     text = output_file.read_text()
-    assert '\\caption{Caption text}\\label{tableTop10}' in text
+    assert '\\caption{Caption text}' in text and '\\label{tableTop10}' in text
     assert '0.80 [0.70, 0.90]' in text

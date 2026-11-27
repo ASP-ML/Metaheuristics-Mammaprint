@@ -4,3 +4,4 @@ resumes/
 __pycache__/
 docs/
 .venv/
+.~lock.*#

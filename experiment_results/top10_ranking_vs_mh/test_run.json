@@ -1,0 +1,17 @@
+{
+  "pairs_file": "experiment_results/top10_ranking_vs_mh/top10_pairs.csv",
+  "pairs_sha256": "0d4f3443fa4b324ec82191e57688461ddbd9b89f3ffad882b3f9399d8be5d58d",
+  "freeze_commit": "c056a16a1e067590c5cd2ce9e697a138b6a0efb0",
+  "freeze_date": "2026-11-27T13:21:58+01:00",
+  "train_file": "train_normal_rtf.csv",
+  "test_file": "test_rtf_v2_cleaned.csv",
+  "patients": 30,
+  "positives": 10,
+  "negatives": 20,
+  "models": 26,
+  "confidence": 0.95,
+  "resamples": 100000,
+  "bootstrap_seed": 45,
+  "scikit_learn": "1.9.1",
+  "numpy": "2.5.4"
+}

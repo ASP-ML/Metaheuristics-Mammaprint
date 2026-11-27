@@ -1,0 +1,781 @@
+Model,SampleID,y_true,y_pred,p_positive
+DE-mi-Naive,72,1,1,0.8498672695836824
+DE-mi-Naive,252,1,1,0.9806289731038345
+DE-mi-Naive,329,0,1,0.7830012204494657
+DE-mi-Naive,215,0,1,0.9656940020680403
+DE-mi-Naive,328,0,0,1.2814585750011142e-06
+DE-mi-Naive,111,1,1,0.9993439600961493
+DE-mi-Naive,36,0,0,0.26449284643042625
+DE-mi-Naive,132,0,1,0.6682737987290543
+DE-mi-Naive,387,0,0,0.09819715820306622
+DE-mi-Naive,317,1,0,0.24288876939767892
+DE-mi-Naive,207,0,0,0.11370075673137961
+DE-mi-Naive,342,0,0,0.18939809770953286
+DE-mi-Naive,388,0,1,0.9983054588265338
+DE-mi-Naive,144,0,1,0.8941874786430181
+DE-mi-Naive,353,0,1,0.8347714677079875
+DE-mi-Naive,197,0,0,6.166944923021293e-05
+DE-mi-Naive,321,1,1,0.6993589087293658
+DE-mi-Naive,325,0,0,0.043589319259382996
+DE-mi-Naive,379,0,1,0.7298281954307241
+DE-mi-Naive,227,1,1,0.835433708231923
+DE-mi-Naive,179,0,1,0.5993985573983519
+DE-mi-Naive,287,0,0,0.00015361817331830077
+DE-mi-Naive,236,0,1,0.8236084186702984
+DE-mi-Naive,351,0,1,0.9660064885621982
+DE-mi-Naive,245,0,1,0.9981151714615101
+DE-mi-Naive,56,1,1,0.8710823369988433
+DE-mi-Naive,314,1,1,0.8172093864628949
+DE-mi-Naive,333,0,1,0.8948723488597021
+DE-mi-Naive,363,1,1,0.9702076531064912
+DE-mi-Naive,395,1,1,0.5373984830691909
+DE-sim_uncertainty-RF estimators: 60,72,1,1,0.55
+DE-sim_uncertainty-RF estimators: 60,252,1,1,0.7
+DE-sim_uncertainty-RF estimators: 60,329,0,0,0.43333333333333335
+DE-sim_uncertainty-RF estimators: 60,215,0,0,0.48333333333333334
+DE-sim_uncertainty-RF estimators: 60,328,0,0,0.26666666666666666
+DE-sim_uncertainty-RF estimators: 60,111,1,1,0.8166666666666667
+DE-sim_uncertainty-RF estimators: 60,36,0,0,0.25
+DE-sim_uncertainty-RF estimators: 60,132,0,0,0.36666666666666664
+DE-sim_uncertainty-RF estimators: 60,387,0,0,0.21666666666666667
+DE-sim_uncertainty-RF estimators: 60,317,1,1,0.6833333333333333
+DE-sim_uncertainty-RF estimators: 60,207,0,0,0.3333333333333333
+DE-sim_uncertainty-RF estimators: 60,342,0,0,0.45
+DE-sim_uncertainty-RF estimators: 60,388,0,0,0.48333333333333334
+DE-sim_uncertainty-RF estimators: 60,144,0,1,0.5333333333333333
+DE-sim_uncertainty-RF estimators: 60,353,0,0,0.5
+DE-sim_uncertainty-RF estimators: 60,197,0,0,0.26666666666666666
+DE-sim_uncertainty-RF estimators: 60,321,1,1,0.6666666666666666
+DE-sim_uncertainty-RF estimators: 60,325,0,0,0.23333333333333334
+DE-sim_uncertainty-RF estimators: 60,379,0,0,0.43333333333333335
+DE-sim_uncertainty-RF estimators: 60,227,1,1,0.6833333333333333
+DE-sim_uncertainty-RF estimators: 60,179,0,1,0.6833333333333333
+DE-sim_uncertainty-RF estimators: 60,287,0,0,0.016666666666666666
+DE-sim_uncertainty-RF estimators: 60,236,0,0,0.3
+DE-sim_uncertainty-RF estimators: 60,351,0,0,0.4666666666666667
+DE-sim_uncertainty-RF estimators: 60,245,0,1,0.7333333333333333
+DE-sim_uncertainty-RF estimators: 60,56,1,1,0.7333333333333333
+DE-sim_uncertainty-RF estimators: 60,314,1,1,0.55
+DE-sim_uncertainty-RF estimators: 60,333,0,0,0.5
+DE-sim_uncertainty-RF estimators: 60,363,1,1,0.5833333333333334
+DE-sim_uncertainty-RF estimators: 60,395,1,1,0.7
+DE-gain_ratio-RF estimators: 60,72,1,1,0.6666666666666666
+DE-gain_ratio-RF estimators: 60,252,1,1,0.8
+DE-gain_ratio-RF estimators: 60,329,0,0,0.2833333333333333
+DE-gain_ratio-RF estimators: 60,215,0,0,0.5
+DE-gain_ratio-RF estimators: 60,328,0,0,0.11666666666666667
+DE-gain_ratio-RF estimators: 60,111,1,1,0.8
+DE-gain_ratio-RF estimators: 60,36,0,0,0.2833333333333333
+DE-gain_ratio-RF estimators: 60,132,0,0,0.35
+DE-gain_ratio-RF estimators: 60,387,0,0,0.31666666666666665
+DE-gain_ratio-RF estimators: 60,317,1,1,0.6333333333333333
+DE-gain_ratio-RF estimators: 60,207,0,0,0.23333333333333334
+DE-gain_ratio-RF estimators: 60,342,0,0,0.2833333333333333
+DE-gain_ratio-RF estimators: 60,388,0,1,0.5166666666666667
+DE-gain_ratio-RF estimators: 60,144,0,1,0.5166666666666667
+DE-gain_ratio-RF estimators: 60,353,0,1,0.55
+DE-gain_ratio-RF estimators: 60,197,0,0,0.15
+DE-gain_ratio-RF estimators: 60,321,1,1,0.65
+DE-gain_ratio-RF estimators: 60,325,0,0,0.16666666666666666
+DE-gain_ratio-RF estimators: 60,379,0,1,0.6833333333333333
+DE-gain_ratio-RF estimators: 60,227,1,1,0.6
+DE-gain_ratio-RF estimators: 60,179,0,1,0.6666666666666666
+DE-gain_ratio-RF estimators: 60,287,0,0,0.08333333333333333
+DE-gain_ratio-RF estimators: 60,236,0,0,0.5
+DE-gain_ratio-RF estimators: 60,351,0,0,0.45
+DE-gain_ratio-RF estimators: 60,245,0,1,0.9
+DE-gain_ratio-RF estimators: 60,56,1,1,0.6666666666666666
+DE-gain_ratio-RF estimators: 60,314,1,1,0.6166666666666667
+DE-gain_ratio-RF estimators: 60,333,0,1,0.5166666666666667
+DE-gain_ratio-RF estimators: 60,363,1,1,0.5833333333333334
+DE-gain_ratio-RF estimators: 60,395,1,1,0.65
+DE-relieff-Knn k = 3,72,1,1,1.0
+DE-relieff-Knn k = 3,252,1,1,1.0
+DE-relieff-Knn k = 3,329,0,0,0.0
+DE-relieff-Knn k = 3,215,0,1,0.6666666666666666
+DE-relieff-Knn k = 3,328,0,0,0.0
+DE-relieff-Knn k = 3,111,1,1,1.0
+DE-relieff-Knn k = 3,36,0,0,0.3333333333333333
+DE-relieff-Knn k = 3,132,0,0,0.3333333333333333
+DE-relieff-Knn k = 3,387,0,1,0.6666666666666666
+DE-relieff-Knn k = 3,317,1,1,1.0
+DE-relieff-Knn k = 3,207,0,0,0.0
+DE-relieff-Knn k = 3,342,0,1,0.6666666666666666
+DE-relieff-Knn k = 3,388,0,0,0.0
+DE-relieff-Knn k = 3,144,0,0,0.3333333333333333
+DE-relieff-Knn k = 3,353,0,1,0.6666666666666666
+DE-relieff-Knn k = 3,197,0,0,0.3333333333333333
+DE-relieff-Knn k = 3,321,1,1,1.0
+DE-relieff-Knn k = 3,325,0,0,0.3333333333333333
+DE-relieff-Knn k = 3,379,0,0,0.3333333333333333
+DE-relieff-Knn k = 3,227,1,1,1.0
+DE-relieff-Knn k = 3,179,0,1,0.6666666666666666
+DE-relieff-Knn k = 3,287,0,0,0.0
+DE-relieff-Knn k = 3,236,0,0,0.3333333333333333
+DE-relieff-Knn k = 3,351,0,0,0.3333333333333333
+DE-relieff-Knn k = 3,245,0,1,0.6666666666666666
+DE-relieff-Knn k = 3,56,1,1,1.0
+DE-relieff-Knn k = 3,314,1,0,0.3333333333333333
+DE-relieff-Knn k = 3,333,0,0,0.0
+DE-relieff-Knn k = 3,363,1,1,0.6666666666666666
+DE-relieff-Knn k = 3,395,1,1,1.0
+DE-chi2-RF estimators: 100,72,1,1,0.62
+DE-chi2-RF estimators: 100,252,1,1,0.73
+DE-chi2-RF estimators: 100,329,0,0,0.45
+DE-chi2-RF estimators: 100,215,0,1,0.58
+DE-chi2-RF estimators: 100,328,0,0,0.04
+DE-chi2-RF estimators: 100,111,1,1,0.63
+DE-chi2-RF estimators: 100,36,0,0,0.21
+DE-chi2-RF estimators: 100,132,0,0,0.42
+DE-chi2-RF estimators: 100,387,0,0,0.25
+DE-chi2-RF estimators: 100,317,1,1,0.72
+DE-chi2-RF estimators: 100,207,0,0,0.47
+DE-chi2-RF estimators: 100,342,0,0,0.19
+DE-chi2-RF estimators: 100,388,0,0,0.29
+DE-chi2-RF estimators: 100,144,0,1,0.63
+DE-chi2-RF estimators: 100,353,0,1,0.71
+DE-chi2-RF estimators: 100,197,0,0,0.22
+DE-chi2-RF estimators: 100,321,1,1,0.77
+DE-chi2-RF estimators: 100,325,0,0,0.27
+DE-chi2-RF estimators: 100,379,0,0,0.38
+DE-chi2-RF estimators: 100,227,1,1,0.63
+DE-chi2-RF estimators: 100,179,0,1,0.7
+DE-chi2-RF estimators: 100,287,0,0,0.12
+DE-chi2-RF estimators: 100,236,0,1,0.66
+DE-chi2-RF estimators: 100,351,0,0,0.49
+DE-chi2-RF estimators: 100,245,0,1,0.9
+DE-chi2-RF estimators: 100,56,1,1,0.73
+DE-chi2-RF estimators: 100,314,1,0,0.37
+DE-chi2-RF estimators: 100,333,0,1,0.72
+DE-chi2-RF estimators: 100,363,1,1,0.53
+DE-chi2-RF estimators: 100,395,1,1,0.53
+GA-mi-RF estimators: 60,72,1,0,0.5
+GA-mi-RF estimators: 60,252,1,1,0.7666666666666667
+GA-mi-RF estimators: 60,329,0,0,0.43333333333333335
+GA-mi-RF estimators: 60,215,0,0,0.38333333333333336
+GA-mi-RF estimators: 60,328,0,0,0.2
+GA-mi-RF estimators: 60,111,1,0,0.45
+GA-mi-RF estimators: 60,36,0,0,0.4
+GA-mi-RF estimators: 60,132,0,0,0.25
+GA-mi-RF estimators: 60,387,0,0,0.2
+GA-mi-RF estimators: 60,317,1,1,0.6333333333333333
+GA-mi-RF estimators: 60,207,0,0,0.4666666666666667
+GA-mi-RF estimators: 60,342,0,0,0.18333333333333332
+GA-mi-RF estimators: 60,388,0,0,0.31666666666666665
+GA-mi-RF estimators: 60,144,0,1,0.7833333333333333
+GA-mi-RF estimators: 60,353,0,1,0.75
+GA-mi-RF estimators: 60,197,0,0,0.06666666666666667
+GA-mi-RF estimators: 60,321,1,1,0.6833333333333333
+GA-mi-RF estimators: 60,325,0,0,0.3333333333333333
+GA-mi-RF estimators: 60,379,0,0,0.3
+GA-mi-RF estimators: 60,227,1,0,0.3333333333333333
+GA-mi-RF estimators: 60,179,0,1,0.8
+GA-mi-RF estimators: 60,287,0,0,0.05
+GA-mi-RF estimators: 60,236,0,0,0.2833333333333333
+GA-mi-RF estimators: 60,351,0,1,0.85
+GA-mi-RF estimators: 60,245,0,1,0.7833333333333333
+GA-mi-RF estimators: 60,56,1,1,0.55
+GA-mi-RF estimators: 60,314,1,0,0.36666666666666664
+GA-mi-RF estimators: 60,333,0,1,0.5166666666666667
+GA-mi-RF estimators: 60,363,1,1,0.6833333333333333
+GA-mi-RF estimators: 60,395,1,0,0.31666666666666665
+GA-sim_uncertainty-RF estimators: 80,72,1,1,0.65
+GA-sim_uncertainty-RF estimators: 80,252,1,1,0.7125
+GA-sim_uncertainty-RF estimators: 80,329,0,0,0.4125
+GA-sim_uncertainty-RF estimators: 80,215,0,0,0.2125
+GA-sim_uncertainty-RF estimators: 80,328,0,0,0.075
+GA-sim_uncertainty-RF estimators: 80,111,1,1,0.6625
+GA-sim_uncertainty-RF estimators: 80,36,0,0,0.225
+GA-sim_uncertainty-RF estimators: 80,132,0,0,0.15
+GA-sim_uncertainty-RF estimators: 80,387,0,0,0.5
+GA-sim_uncertainty-RF estimators: 80,317,1,0,0.3125
+GA-sim_uncertainty-RF estimators: 80,207,0,0,0.1875
+GA-sim_uncertainty-RF estimators: 80,342,0,0,0.225
+GA-sim_uncertainty-RF estimators: 80,388,0,0,0.3375
+GA-sim_uncertainty-RF estimators: 80,144,0,0,0.3625
+GA-sim_uncertainty-RF estimators: 80,353,0,1,0.6125
+GA-sim_uncertainty-RF estimators: 80,197,0,0,0.1125
+GA-sim_uncertainty-RF estimators: 80,321,1,1,0.725
+GA-sim_uncertainty-RF estimators: 80,325,0,0,0.2
+GA-sim_uncertainty-RF estimators: 80,379,0,1,0.9
+GA-sim_uncertainty-RF estimators: 80,227,1,1,0.5375
+GA-sim_uncertainty-RF estimators: 80,179,0,0,0.3875
+GA-sim_uncertainty-RF estimators: 80,287,0,0,0.1
+GA-sim_uncertainty-RF estimators: 80,236,0,1,0.8
+GA-sim_uncertainty-RF estimators: 80,351,0,1,0.7875
+GA-sim_uncertainty-RF estimators: 80,245,0,1,0.7125
+GA-sim_uncertainty-RF estimators: 80,56,1,1,0.625
+GA-sim_uncertainty-RF estimators: 80,314,1,1,0.75
+GA-sim_uncertainty-RF estimators: 80,333,0,1,0.7875
+GA-sim_uncertainty-RF estimators: 80,363,1,0,0.3125
+GA-sim_uncertainty-RF estimators: 80,395,1,1,0.525
+GA-gain_ratio-RF estimators: 80,72,1,1,0.6375
+GA-gain_ratio-RF estimators: 80,252,1,1,0.5875
+GA-gain_ratio-RF estimators: 80,329,0,0,0.2875
+GA-gain_ratio-RF estimators: 80,215,0,0,0.3
+GA-gain_ratio-RF estimators: 80,328,0,0,0.0875
+GA-gain_ratio-RF estimators: 80,111,1,0,0.3
+GA-gain_ratio-RF estimators: 80,36,0,0,0.475
+GA-gain_ratio-RF estimators: 80,132,0,0,0.275
+GA-gain_ratio-RF estimators: 80,387,0,0,0.25
+GA-gain_ratio-RF estimators: 80,317,1,0,0.475
+GA-gain_ratio-RF estimators: 80,207,0,0,0.4625
+GA-gain_ratio-RF estimators: 80,342,0,0,0.2875
+GA-gain_ratio-RF estimators: 80,388,0,0,0.1
+GA-gain_ratio-RF estimators: 80,144,0,0,0.125
+GA-gain_ratio-RF estimators: 80,353,0,1,0.6625
+GA-gain_ratio-RF estimators: 80,197,0,0,0.1625
+GA-gain_ratio-RF estimators: 80,321,1,1,0.625
+GA-gain_ratio-RF estimators: 80,325,0,0,0.05
+GA-gain_ratio-RF estimators: 80,379,0,1,0.5875
+GA-gain_ratio-RF estimators: 80,227,1,0,0.4375
+GA-gain_ratio-RF estimators: 80,179,0,1,0.6625
+GA-gain_ratio-RF estimators: 80,287,0,0,0.1875
+GA-gain_ratio-RF estimators: 80,236,0,1,0.9375
+GA-gain_ratio-RF estimators: 80,351,0,1,0.55
+GA-gain_ratio-RF estimators: 80,245,0,1,0.9375
+GA-gain_ratio-RF estimators: 80,56,1,1,0.5375
+GA-gain_ratio-RF estimators: 80,314,1,1,0.5875
+GA-gain_ratio-RF estimators: 80,333,0,1,0.625
+GA-gain_ratio-RF estimators: 80,363,1,0,0.4
+GA-gain_ratio-RF estimators: 80,395,1,1,0.675
+GA-relieff-Knn k = 3,72,1,1,1.0
+GA-relieff-Knn k = 3,252,1,1,1.0
+GA-relieff-Knn k = 3,329,0,0,0.0
+GA-relieff-Knn k = 3,215,0,0,0.0
+GA-relieff-Knn k = 3,328,0,0,0.3333333333333333
+GA-relieff-Knn k = 3,111,1,1,0.6666666666666666
+GA-relieff-Knn k = 3,36,0,1,1.0
+GA-relieff-Knn k = 3,132,0,0,0.3333333333333333
+GA-relieff-Knn k = 3,387,0,0,0.3333333333333333
+GA-relieff-Knn k = 3,317,1,1,1.0
+GA-relieff-Knn k = 3,207,0,0,0.3333333333333333
+GA-relieff-Knn k = 3,342,0,0,0.3333333333333333
+GA-relieff-Knn k = 3,388,0,0,0.0
+GA-relieff-Knn k = 3,144,0,1,0.6666666666666666
+GA-relieff-Knn k = 3,353,0,0,0.0
+GA-relieff-Knn k = 3,197,0,1,0.6666666666666666
+GA-relieff-Knn k = 3,321,1,1,1.0
+GA-relieff-Knn k = 3,325,0,0,0.3333333333333333
+GA-relieff-Knn k = 3,379,0,1,0.6666666666666666
+GA-relieff-Knn k = 3,227,1,1,1.0
+GA-relieff-Knn k = 3,179,0,0,0.3333333333333333
+GA-relieff-Knn k = 3,287,0,0,0.0
+GA-relieff-Knn k = 3,236,0,1,0.6666666666666666
+GA-relieff-Knn k = 3,351,0,0,0.3333333333333333
+GA-relieff-Knn k = 3,245,0,1,1.0
+GA-relieff-Knn k = 3,56,1,1,1.0
+GA-relieff-Knn k = 3,314,1,1,0.6666666666666666
+GA-relieff-Knn k = 3,333,0,0,0.0
+GA-relieff-Knn k = 3,363,1,1,0.6666666666666666
+GA-relieff-Knn k = 3,395,1,1,1.0
+GA-chi2-SVM (Poly),72,1,0,0.4662709332151237
+GA-chi2-SVM (Poly),252,1,1,0.9068593118326029
+GA-chi2-SVM (Poly),329,0,0,0.44672903302179306
+GA-chi2-SVM (Poly),215,0,1,0.5214085372635376
+GA-chi2-SVM (Poly),328,0,0,0.2796770438082123
+GA-chi2-SVM (Poly),111,1,1,0.5665990708386669
+GA-chi2-SVM (Poly),36,0,0,0.5
+GA-chi2-SVM (Poly),132,0,1,0.7398320982093903
+GA-chi2-SVM (Poly),387,0,0,0.37871507292966583
+GA-chi2-SVM (Poly),317,1,1,0.52818614966375
+GA-chi2-SVM (Poly),207,0,0,0.3923757973401063
+GA-chi2-SVM (Poly),342,0,0,0.4825854029017171
+GA-chi2-SVM (Poly),388,0,0,0.3657909878527831
+GA-chi2-SVM (Poly),144,0,1,0.5647393569029637
+GA-chi2-SVM (Poly),353,0,1,0.5996655009934381
+GA-chi2-SVM (Poly),197,0,0,0.41850788538877925
+GA-chi2-SVM (Poly),321,1,1,0.522086258531469
+GA-chi2-SVM (Poly),325,0,0,0.38535696916590767
+GA-chi2-SVM (Poly),379,0,0,0.45827628607326437
+GA-chi2-SVM (Poly),227,1,1,0.6275233421559905
+GA-chi2-SVM (Poly),179,0,1,0.72758658307166
+GA-chi2-SVM (Poly),287,0,0,0.23123093211618087
+GA-chi2-SVM (Poly),236,0,1,0.5210819998464484
+GA-chi2-SVM (Poly),351,0,1,0.7976040575680337
+GA-chi2-SVM (Poly),245,0,1,0.6600758237630895
+GA-chi2-SVM (Poly),56,1,1,0.58823489239987
+GA-chi2-SVM (Poly),314,1,0,0.08720910305404188
+GA-chi2-SVM (Poly),333,0,1,0.710534734385938
+GA-chi2-SVM (Poly),363,1,1,0.5508100905253591
+GA-chi2-SVM (Poly),395,1,0,0.3468402559990337
+SA-mi-RF estimators: 100,72,1,1,0.55
+SA-mi-RF estimators: 100,252,1,1,0.86
+SA-mi-RF estimators: 100,329,0,0,0.46
+SA-mi-RF estimators: 100,215,0,1,0.52
+SA-mi-RF estimators: 100,328,0,0,0.23
+SA-mi-RF estimators: 100,111,1,1,0.64
+SA-mi-RF estimators: 100,36,0,0,0.25
+SA-mi-RF estimators: 100,132,0,1,0.63
+SA-mi-RF estimators: 100,387,0,0,0.5
+SA-mi-RF estimators: 100,317,1,1,0.83
+SA-mi-RF estimators: 100,207,0,0,0.21
+SA-mi-RF estimators: 100,342,0,0,0.47
+SA-mi-RF estimators: 100,388,0,0,0.19
+SA-mi-RF estimators: 100,144,0,1,0.76
+SA-mi-RF estimators: 100,353,0,1,0.65
+SA-mi-RF estimators: 100,197,0,0,0.19
+SA-mi-RF estimators: 100,321,1,1,0.56
+SA-mi-RF estimators: 100,325,0,0,0.37
+SA-mi-RF estimators: 100,379,0,1,0.79
+SA-mi-RF estimators: 100,227,1,0,0.38
+SA-mi-RF estimators: 100,179,0,1,0.68
+SA-mi-RF estimators: 100,287,0,0,0.14
+SA-mi-RF estimators: 100,236,0,1,0.62
+SA-mi-RF estimators: 100,351,0,1,0.74
+SA-mi-RF estimators: 100,245,0,1,0.59
+SA-mi-RF estimators: 100,56,1,1,0.55
+SA-mi-RF estimators: 100,314,1,1,0.88
+SA-mi-RF estimators: 100,333,0,1,0.66
+SA-mi-RF estimators: 100,363,1,0,0.5
+SA-mi-RF estimators: 100,395,1,0,0.43
+SA-sim_uncertainty-RF estimators: 60,72,1,1,0.6833333333333333
+SA-sim_uncertainty-RF estimators: 60,252,1,1,0.5166666666666667
+SA-sim_uncertainty-RF estimators: 60,329,0,0,0.25
+SA-sim_uncertainty-RF estimators: 60,215,0,0,0.23333333333333334
+SA-sim_uncertainty-RF estimators: 60,328,0,0,0.05
+SA-sim_uncertainty-RF estimators: 60,111,1,1,0.5666666666666667
+SA-sim_uncertainty-RF estimators: 60,36,0,0,0.5
+SA-sim_uncertainty-RF estimators: 60,132,0,0,0.4
+SA-sim_uncertainty-RF estimators: 60,387,0,0,0.016666666666666666
+SA-sim_uncertainty-RF estimators: 60,317,1,0,0.48333333333333334
+SA-sim_uncertainty-RF estimators: 60,207,0,0,0.2
+SA-sim_uncertainty-RF estimators: 60,342,0,0,0.23333333333333334
+SA-sim_uncertainty-RF estimators: 60,388,0,0,0.4666666666666667
+SA-sim_uncertainty-RF estimators: 60,144,0,0,0.4166666666666667
+SA-sim_uncertainty-RF estimators: 60,353,0,1,0.6
+SA-sim_uncertainty-RF estimators: 60,197,0,0,0.2833333333333333
+SA-sim_uncertainty-RF estimators: 60,321,1,1,0.5333333333333333
+SA-sim_uncertainty-RF estimators: 60,325,0,0,0.21666666666666667
+SA-sim_uncertainty-RF estimators: 60,379,0,1,0.7333333333333333
+SA-sim_uncertainty-RF estimators: 60,227,1,0,0.45
+SA-sim_uncertainty-RF estimators: 60,179,0,1,0.85
+SA-sim_uncertainty-RF estimators: 60,287,0,0,0.16666666666666666
+SA-sim_uncertainty-RF estimators: 60,236,0,0,0.4666666666666667
+SA-sim_uncertainty-RF estimators: 60,351,0,1,0.8
+SA-sim_uncertainty-RF estimators: 60,245,0,1,0.8333333333333334
+SA-sim_uncertainty-RF estimators: 60,56,1,0,0.5
+SA-sim_uncertainty-RF estimators: 60,314,1,1,0.6
+SA-sim_uncertainty-RF estimators: 60,333,0,1,0.6333333333333333
+SA-sim_uncertainty-RF estimators: 60,363,1,0,0.43333333333333335
+SA-sim_uncertainty-RF estimators: 60,395,1,1,0.55
+SA-gain_ratio-RF estimators: 80,72,1,1,0.6125
+SA-gain_ratio-RF estimators: 80,252,1,0,0.5
+SA-gain_ratio-RF estimators: 80,329,0,0,0.425
+SA-gain_ratio-RF estimators: 80,215,0,0,0.1375
+SA-gain_ratio-RF estimators: 80,328,0,0,0.2875
+SA-gain_ratio-RF estimators: 80,111,1,0,0.3625
+SA-gain_ratio-RF estimators: 80,36,0,0,0.3
+SA-gain_ratio-RF estimators: 80,132,0,0,0.325
+SA-gain_ratio-RF estimators: 80,387,0,1,0.6125
+SA-gain_ratio-RF estimators: 80,317,1,1,0.5375
+SA-gain_ratio-RF estimators: 80,207,0,0,0.275
+SA-gain_ratio-RF estimators: 80,342,0,0,0.4125
+SA-gain_ratio-RF estimators: 80,388,0,1,0.6125
+SA-gain_ratio-RF estimators: 80,144,0,1,0.5625
+SA-gain_ratio-RF estimators: 80,353,0,1,0.6375
+SA-gain_ratio-RF estimators: 80,197,0,0,0.3875
+SA-gain_ratio-RF estimators: 80,321,1,0,0.45
+SA-gain_ratio-RF estimators: 80,325,0,0,0.2125
+SA-gain_ratio-RF estimators: 80,379,0,1,0.675
+SA-gain_ratio-RF estimators: 80,227,1,0,0.4625
+SA-gain_ratio-RF estimators: 80,179,0,1,0.675
+SA-gain_ratio-RF estimators: 80,287,0,0,0.0375
+SA-gain_ratio-RF estimators: 80,236,0,1,0.55
+SA-gain_ratio-RF estimators: 80,351,0,0,0.3375
+SA-gain_ratio-RF estimators: 80,245,0,1,0.875
+SA-gain_ratio-RF estimators: 80,56,1,1,0.85
+SA-gain_ratio-RF estimators: 80,314,1,1,0.55
+SA-gain_ratio-RF estimators: 80,333,0,1,0.5875
+SA-gain_ratio-RF estimators: 80,363,1,0,0.275
+SA-gain_ratio-RF estimators: 80,395,1,1,0.5625
+SA-relieff-Knn k = 5,72,1,1,1.0
+SA-relieff-Knn k = 5,252,1,1,0.8
+SA-relieff-Knn k = 5,329,0,0,0.2
+SA-relieff-Knn k = 5,215,0,0,0.4
+SA-relieff-Knn k = 5,328,0,0,0.2
+SA-relieff-Knn k = 5,111,1,1,0.6
+SA-relieff-Knn k = 5,36,0,1,0.6
+SA-relieff-Knn k = 5,132,0,0,0.2
+SA-relieff-Knn k = 5,387,0,1,0.8
+SA-relieff-Knn k = 5,317,1,1,0.6
+SA-relieff-Knn k = 5,207,0,0,0.0
+SA-relieff-Knn k = 5,342,0,0,0.2
+SA-relieff-Knn k = 5,388,0,0,0.2
+SA-relieff-Knn k = 5,144,0,1,0.8
+SA-relieff-Knn k = 5,353,0,1,1.0
+SA-relieff-Knn k = 5,197,0,0,0.0
+SA-relieff-Knn k = 5,321,1,1,1.0
+SA-relieff-Knn k = 5,325,0,0,0.2
+SA-relieff-Knn k = 5,379,0,1,0.6
+SA-relieff-Knn k = 5,227,1,1,0.8
+SA-relieff-Knn k = 5,179,0,1,0.8
+SA-relieff-Knn k = 5,287,0,0,0.0
+SA-relieff-Knn k = 5,236,0,0,0.4
+SA-relieff-Knn k = 5,351,0,1,0.8
+SA-relieff-Knn k = 5,245,0,1,1.0
+SA-relieff-Knn k = 5,56,1,1,0.8
+SA-relieff-Knn k = 5,314,1,1,0.6
+SA-relieff-Knn k = 5,333,0,1,0.6
+SA-relieff-Knn k = 5,363,1,1,0.8
+SA-relieff-Knn k = 5,395,1,1,0.8
+SA-chi2-RF estimators: 100,72,1,1,0.85
+SA-chi2-RF estimators: 100,252,1,1,0.8
+SA-chi2-RF estimators: 100,329,0,0,0.45
+SA-chi2-RF estimators: 100,215,0,0,0.32
+SA-chi2-RF estimators: 100,328,0,0,0.22
+SA-chi2-RF estimators: 100,111,1,1,0.71
+SA-chi2-RF estimators: 100,36,0,0,0.26
+SA-chi2-RF estimators: 100,132,0,0,0.35
+SA-chi2-RF estimators: 100,387,0,0,0.28
+SA-chi2-RF estimators: 100,317,1,0,0.45
+SA-chi2-RF estimators: 100,207,0,0,0.35
+SA-chi2-RF estimators: 100,342,0,0,0.17
+SA-chi2-RF estimators: 100,388,0,0,0.47
+SA-chi2-RF estimators: 100,144,0,1,0.61
+SA-chi2-RF estimators: 100,353,0,1,0.64
+SA-chi2-RF estimators: 100,197,0,0,0.29
+SA-chi2-RF estimators: 100,321,1,0,0.49
+SA-chi2-RF estimators: 100,325,0,0,0.22
+SA-chi2-RF estimators: 100,379,0,1,0.6
+SA-chi2-RF estimators: 100,227,1,1,0.73
+SA-chi2-RF estimators: 100,179,0,1,0.72
+SA-chi2-RF estimators: 100,287,0,0,0.21
+SA-chi2-RF estimators: 100,236,0,0,0.49
+SA-chi2-RF estimators: 100,351,0,1,0.71
+SA-chi2-RF estimators: 100,245,0,1,0.79
+SA-chi2-RF estimators: 100,56,1,1,0.75
+SA-chi2-RF estimators: 100,314,1,1,0.61
+SA-chi2-RF estimators: 100,333,0,1,0.64
+SA-chi2-RF estimators: 100,363,1,1,0.69
+SA-chi2-RF estimators: 100,395,1,0,0.42
+TOP10-mi-Naive,72,1,1,0.6758717912581634
+TOP10-mi-Naive,252,1,1,0.9810668745545749
+TOP10-mi-Naive,329,0,1,0.8312344095811215
+TOP10-mi-Naive,215,0,1,0.9806884324851686
+TOP10-mi-Naive,328,0,0,7.389415374594761e-06
+TOP10-mi-Naive,111,1,1,0.9939747051607722
+TOP10-mi-Naive,36,0,0,0.12834360794711808
+TOP10-mi-Naive,132,0,1,0.6362509852579958
+TOP10-mi-Naive,387,0,0,0.23115325699968345
+TOP10-mi-Naive,317,1,0,0.20405360508340603
+TOP10-mi-Naive,207,0,0,0.079700096535623
+TOP10-mi-Naive,342,0,0,0.30876479682108077
+TOP10-mi-Naive,388,0,1,0.9731034185054289
+TOP10-mi-Naive,144,0,1,0.963453101864882
+TOP10-mi-Naive,353,0,1,0.8476899386235255
+TOP10-mi-Naive,197,0,0,0.0008537639477599429
+TOP10-mi-Naive,321,1,1,0.7963989383053187
+TOP10-mi-Naive,325,0,0,0.14796894852202427
+TOP10-mi-Naive,379,0,1,0.6563126608738009
+TOP10-mi-Naive,227,1,1,0.7639071040938668
+TOP10-mi-Naive,179,0,1,0.7186330369798513
+TOP10-mi-Naive,287,0,0,0.0005736889155852279
+TOP10-mi-Naive,236,0,1,0.9149254268153296
+TOP10-mi-Naive,351,0,1,0.9703408778836788
+TOP10-mi-Naive,245,0,1,0.9950191859397459
+TOP10-mi-Naive,56,1,1,0.9203716206329707
+TOP10-mi-Naive,314,1,1,0.538779164477846
+TOP10-mi-Naive,333,0,1,0.8306461086914939
+TOP10-mi-Naive,363,1,0,0.47088703075995647
+TOP10-mi-Naive,395,1,0,0.4656174740750489
+TOP10-sim_uncertainty-RF estimators: 60,72,1,1,0.7166666666666667
+TOP10-sim_uncertainty-RF estimators: 60,252,1,1,0.6166666666666667
+TOP10-sim_uncertainty-RF estimators: 60,329,0,0,0.48333333333333334
+TOP10-sim_uncertainty-RF estimators: 60,215,0,0,0.35
+TOP10-sim_uncertainty-RF estimators: 60,328,0,0,0.16666666666666666
+TOP10-sim_uncertainty-RF estimators: 60,111,1,1,0.5833333333333334
+TOP10-sim_uncertainty-RF estimators: 60,36,0,0,0.26666666666666666
+TOP10-sim_uncertainty-RF estimators: 60,132,0,0,0.3
+TOP10-sim_uncertainty-RF estimators: 60,387,0,0,0.18333333333333332
+TOP10-sim_uncertainty-RF estimators: 60,317,1,1,0.6333333333333333
+TOP10-sim_uncertainty-RF estimators: 60,207,0,0,0.26666666666666666
+TOP10-sim_uncertainty-RF estimators: 60,342,0,0,0.21666666666666667
+TOP10-sim_uncertainty-RF estimators: 60,388,0,0,0.3333333333333333
+TOP10-sim_uncertainty-RF estimators: 60,144,0,0,0.4666666666666667
+TOP10-sim_uncertainty-RF estimators: 60,353,0,0,0.48333333333333334
+TOP10-sim_uncertainty-RF estimators: 60,197,0,0,0.16666666666666666
+TOP10-sim_uncertainty-RF estimators: 60,321,1,1,0.8333333333333334
+TOP10-sim_uncertainty-RF estimators: 60,325,0,0,0.11666666666666667
+TOP10-sim_uncertainty-RF estimators: 60,379,0,1,0.7833333333333333
+TOP10-sim_uncertainty-RF estimators: 60,227,1,1,0.55
+TOP10-sim_uncertainty-RF estimators: 60,179,0,1,0.6
+TOP10-sim_uncertainty-RF estimators: 60,287,0,0,0.1
+TOP10-sim_uncertainty-RF estimators: 60,236,0,0,0.38333333333333336
+TOP10-sim_uncertainty-RF estimators: 60,351,0,1,0.8333333333333334
+TOP10-sim_uncertainty-RF estimators: 60,245,0,1,0.9333333333333333
+TOP10-sim_uncertainty-RF estimators: 60,56,1,0,0.31666666666666665
+TOP10-sim_uncertainty-RF estimators: 60,314,1,0,0.4166666666666667
+TOP10-sim_uncertainty-RF estimators: 60,333,0,1,0.5166666666666667
+TOP10-sim_uncertainty-RF estimators: 60,363,1,0,0.4666666666666667
+TOP10-sim_uncertainty-RF estimators: 60,395,1,0,0.45
+TOP10-gain_ratio-RF estimators: 60,72,1,1,0.6666666666666666
+TOP10-gain_ratio-RF estimators: 60,252,1,1,0.8
+TOP10-gain_ratio-RF estimators: 60,329,0,0,0.2833333333333333
+TOP10-gain_ratio-RF estimators: 60,215,0,0,0.5
+TOP10-gain_ratio-RF estimators: 60,328,0,0,0.11666666666666667
+TOP10-gain_ratio-RF estimators: 60,111,1,1,0.8
+TOP10-gain_ratio-RF estimators: 60,36,0,0,0.2833333333333333
+TOP10-gain_ratio-RF estimators: 60,132,0,0,0.35
+TOP10-gain_ratio-RF estimators: 60,387,0,0,0.31666666666666665
+TOP10-gain_ratio-RF estimators: 60,317,1,1,0.6333333333333333
+TOP10-gain_ratio-RF estimators: 60,207,0,0,0.23333333333333334
+TOP10-gain_ratio-RF estimators: 60,342,0,0,0.2833333333333333
+TOP10-gain_ratio-RF estimators: 60,388,0,1,0.5166666666666667
+TOP10-gain_ratio-RF estimators: 60,144,0,1,0.5166666666666667
+TOP10-gain_ratio-RF estimators: 60,353,0,1,0.55
+TOP10-gain_ratio-RF estimators: 60,197,0,0,0.15
+TOP10-gain_ratio-RF estimators: 60,321,1,1,0.65
+TOP10-gain_ratio-RF estimators: 60,325,0,0,0.16666666666666666
+TOP10-gain_ratio-RF estimators: 60,379,0,1,0.6833333333333333
+TOP10-gain_ratio-RF estimators: 60,227,1,1,0.6
+TOP10-gain_ratio-RF estimators: 60,179,0,1,0.6666666666666666
+TOP10-gain_ratio-RF estimators: 60,287,0,0,0.08333333333333333
+TOP10-gain_ratio-RF estimators: 60,236,0,0,0.5
+TOP10-gain_ratio-RF estimators: 60,351,0,0,0.45
+TOP10-gain_ratio-RF estimators: 60,245,0,1,0.9
+TOP10-gain_ratio-RF estimators: 60,56,1,1,0.6666666666666666
+TOP10-gain_ratio-RF estimators: 60,314,1,1,0.6166666666666667
+TOP10-gain_ratio-RF estimators: 60,333,0,1,0.5166666666666667
+TOP10-gain_ratio-RF estimators: 60,363,1,1,0.5833333333333334
+TOP10-gain_ratio-RF estimators: 60,395,1,1,0.65
+TOP10-relieff-Knn k = 3,72,1,1,1.0
+TOP10-relieff-Knn k = 3,252,1,1,1.0
+TOP10-relieff-Knn k = 3,329,0,0,0.3333333333333333
+TOP10-relieff-Knn k = 3,215,0,0,0.3333333333333333
+TOP10-relieff-Knn k = 3,328,0,0,0.0
+TOP10-relieff-Knn k = 3,111,1,1,0.6666666666666666
+TOP10-relieff-Knn k = 3,36,0,1,0.6666666666666666
+TOP10-relieff-Knn k = 3,132,0,1,0.6666666666666666
+TOP10-relieff-Knn k = 3,387,0,1,0.6666666666666666
+TOP10-relieff-Knn k = 3,317,1,1,0.6666666666666666
+TOP10-relieff-Knn k = 3,207,0,0,0.0
+TOP10-relieff-Knn k = 3,342,0,0,0.0
+TOP10-relieff-Knn k = 3,388,0,0,0.0
+TOP10-relieff-Knn k = 3,144,0,0,0.3333333333333333
+TOP10-relieff-Knn k = 3,353,0,1,1.0
+TOP10-relieff-Knn k = 3,197,0,0,0.0
+TOP10-relieff-Knn k = 3,321,1,1,1.0
+TOP10-relieff-Knn k = 3,325,0,0,0.3333333333333333
+TOP10-relieff-Knn k = 3,379,0,1,0.6666666666666666
+TOP10-relieff-Knn k = 3,227,1,1,1.0
+TOP10-relieff-Knn k = 3,179,0,1,0.6666666666666666
+TOP10-relieff-Knn k = 3,287,0,0,0.0
+TOP10-relieff-Knn k = 3,236,0,0,0.0
+TOP10-relieff-Knn k = 3,351,0,1,0.6666666666666666
+TOP10-relieff-Knn k = 3,245,0,1,1.0
+TOP10-relieff-Knn k = 3,56,1,1,1.0
+TOP10-relieff-Knn k = 3,314,1,1,0.6666666666666666
+TOP10-relieff-Knn k = 3,333,0,0,0.3333333333333333
+TOP10-relieff-Knn k = 3,363,1,0,0.3333333333333333
+TOP10-relieff-Knn k = 3,395,1,1,1.0
+TOP10-chi2-RF estimators: 100,72,1,1,0.57
+TOP10-chi2-RF estimators: 100,252,1,1,0.79
+TOP10-chi2-RF estimators: 100,329,0,1,0.73
+TOP10-chi2-RF estimators: 100,215,0,0,0.49
+TOP10-chi2-RF estimators: 100,328,0,0,0.1
+TOP10-chi2-RF estimators: 100,111,1,1,0.55
+TOP10-chi2-RF estimators: 100,36,0,0,0.27
+TOP10-chi2-RF estimators: 100,132,0,0,0.34
+TOP10-chi2-RF estimators: 100,387,0,0,0.37
+TOP10-chi2-RF estimators: 100,317,1,1,0.72
+TOP10-chi2-RF estimators: 100,207,0,0,0.3
+TOP10-chi2-RF estimators: 100,342,0,0,0.37
+TOP10-chi2-RF estimators: 100,388,0,0,0.31
+TOP10-chi2-RF estimators: 100,144,0,1,0.9
+TOP10-chi2-RF estimators: 100,353,0,1,0.61
+TOP10-chi2-RF estimators: 100,197,0,0,0.14
+TOP10-chi2-RF estimators: 100,321,1,1,0.8
+TOP10-chi2-RF estimators: 100,325,0,0,0.25
+TOP10-chi2-RF estimators: 100,379,0,1,0.52
+TOP10-chi2-RF estimators: 100,227,1,1,0.56
+TOP10-chi2-RF estimators: 100,179,0,1,0.69
+TOP10-chi2-RF estimators: 100,287,0,0,0.05
+TOP10-chi2-RF estimators: 100,236,0,0,0.34
+TOP10-chi2-RF estimators: 100,351,0,1,0.79
+TOP10-chi2-RF estimators: 100,245,0,1,0.85
+TOP10-chi2-RF estimators: 100,56,1,0,0.47
+TOP10-chi2-RF estimators: 100,314,1,0,0.42
+TOP10-chi2-RF estimators: 100,333,0,1,0.64
+TOP10-chi2-RF estimators: 100,363,1,1,0.63
+TOP10-chi2-RF estimators: 100,395,1,0,0.49
+TOP10-mi-RF estimators: 60,72,1,1,0.6833333333333333
+TOP10-mi-RF estimators: 60,252,1,1,0.7
+TOP10-mi-RF estimators: 60,329,0,1,0.5333333333333333
+TOP10-mi-RF estimators: 60,215,0,0,0.5
+TOP10-mi-RF estimators: 60,328,0,0,0.23333333333333334
+TOP10-mi-RF estimators: 60,111,1,1,0.8166666666666667
+TOP10-mi-RF estimators: 60,36,0,0,0.31666666666666665
+TOP10-mi-RF estimators: 60,132,0,0,0.4
+TOP10-mi-RF estimators: 60,387,0,0,0.21666666666666667
+TOP10-mi-RF estimators: 60,317,1,1,0.55
+TOP10-mi-RF estimators: 60,207,0,0,0.2
+TOP10-mi-RF estimators: 60,342,0,0,0.3333333333333333
+TOP10-mi-RF estimators: 60,388,0,1,0.7333333333333333
+TOP10-mi-RF estimators: 60,144,0,1,0.5666666666666667
+TOP10-mi-RF estimators: 60,353,0,1,0.5666666666666667
+TOP10-mi-RF estimators: 60,197,0,0,0.15
+TOP10-mi-RF estimators: 60,321,1,1,0.8
+TOP10-mi-RF estimators: 60,325,0,0,0.25
+TOP10-mi-RF estimators: 60,379,0,0,0.38333333333333336
+TOP10-mi-RF estimators: 60,227,1,1,0.7
+TOP10-mi-RF estimators: 60,179,0,1,0.6333333333333333
+TOP10-mi-RF estimators: 60,287,0,0,0.08333333333333333
+TOP10-mi-RF estimators: 60,236,0,0,0.38333333333333336
+TOP10-mi-RF estimators: 60,351,0,1,0.6333333333333333
+TOP10-mi-RF estimators: 60,245,0,1,0.8833333333333333
+TOP10-mi-RF estimators: 60,56,1,1,0.8166666666666667
+TOP10-mi-RF estimators: 60,314,1,0,0.31666666666666665
+TOP10-mi-RF estimators: 60,333,0,0,0.2833333333333333
+TOP10-mi-RF estimators: 60,363,1,0,0.4666666666666667
+TOP10-mi-RF estimators: 60,395,1,1,0.7
+TOP10-sim_uncertainty-RF estimators: 80,72,1,1,0.7125
+TOP10-sim_uncertainty-RF estimators: 80,252,1,1,0.6
+TOP10-sim_uncertainty-RF estimators: 80,329,0,1,0.55
+TOP10-sim_uncertainty-RF estimators: 80,215,0,0,0.325
+TOP10-sim_uncertainty-RF estimators: 80,328,0,0,0.1375
+TOP10-sim_uncertainty-RF estimators: 80,111,1,1,0.575
+TOP10-sim_uncertainty-RF estimators: 80,36,0,0,0.3125
+TOP10-sim_uncertainty-RF estimators: 80,132,0,0,0.3125
+TOP10-sim_uncertainty-RF estimators: 80,387,0,0,0.175
+TOP10-sim_uncertainty-RF estimators: 80,317,1,1,0.6
+TOP10-sim_uncertainty-RF estimators: 80,207,0,0,0.2625
+TOP10-sim_uncertainty-RF estimators: 80,342,0,0,0.25
+TOP10-sim_uncertainty-RF estimators: 80,388,0,0,0.3375
+TOP10-sim_uncertainty-RF estimators: 80,144,0,0,0.4875
+TOP10-sim_uncertainty-RF estimators: 80,353,0,1,0.525
+TOP10-sim_uncertainty-RF estimators: 80,197,0,0,0.175
+TOP10-sim_uncertainty-RF estimators: 80,321,1,1,0.825
+TOP10-sim_uncertainty-RF estimators: 80,325,0,0,0.1125
+TOP10-sim_uncertainty-RF estimators: 80,379,0,1,0.7375
+TOP10-sim_uncertainty-RF estimators: 80,227,1,1,0.5625
+TOP10-sim_uncertainty-RF estimators: 80,179,0,1,0.6125
+TOP10-sim_uncertainty-RF estimators: 80,287,0,0,0.1
+TOP10-sim_uncertainty-RF estimators: 80,236,0,0,0.3625
+TOP10-sim_uncertainty-RF estimators: 80,351,0,1,0.8375
+TOP10-sim_uncertainty-RF estimators: 80,245,0,1,0.925
+TOP10-sim_uncertainty-RF estimators: 80,56,1,0,0.3375
+TOP10-sim_uncertainty-RF estimators: 80,314,1,0,0.475
+TOP10-sim_uncertainty-RF estimators: 80,333,0,0,0.4875
+TOP10-sim_uncertainty-RF estimators: 80,363,1,0,0.475
+TOP10-sim_uncertainty-RF estimators: 80,395,1,0,0.5
+TOP10-gain_ratio-RF estimators: 80,72,1,1,0.65
+TOP10-gain_ratio-RF estimators: 80,252,1,1,0.7375
+TOP10-gain_ratio-RF estimators: 80,329,0,0,0.275
+TOP10-gain_ratio-RF estimators: 80,215,0,0,0.45
+TOP10-gain_ratio-RF estimators: 80,328,0,0,0.1
+TOP10-gain_ratio-RF estimators: 80,111,1,1,0.8375
+TOP10-gain_ratio-RF estimators: 80,36,0,0,0.2875
+TOP10-gain_ratio-RF estimators: 80,132,0,0,0.3125
+TOP10-gain_ratio-RF estimators: 80,387,0,0,0.275
+TOP10-gain_ratio-RF estimators: 80,317,1,1,0.6
+TOP10-gain_ratio-RF estimators: 80,207,0,0,0.2375
+TOP10-gain_ratio-RF estimators: 80,342,0,0,0.2875
+TOP10-gain_ratio-RF estimators: 80,388,0,1,0.5375
+TOP10-gain_ratio-RF estimators: 80,144,0,0,0.4875
+TOP10-gain_ratio-RF estimators: 80,353,0,1,0.6
+TOP10-gain_ratio-RF estimators: 80,197,0,0,0.1375
+TOP10-gain_ratio-RF estimators: 80,321,1,1,0.6375
+TOP10-gain_ratio-RF estimators: 80,325,0,0,0.175
+TOP10-gain_ratio-RF estimators: 80,379,0,1,0.6625
+TOP10-gain_ratio-RF estimators: 80,227,1,1,0.625
+TOP10-gain_ratio-RF estimators: 80,179,0,1,0.725
+TOP10-gain_ratio-RF estimators: 80,287,0,0,0.075
+TOP10-gain_ratio-RF estimators: 80,236,0,1,0.5375
+TOP10-gain_ratio-RF estimators: 80,351,0,0,0.475
+TOP10-gain_ratio-RF estimators: 80,245,0,1,0.9
+TOP10-gain_ratio-RF estimators: 80,56,1,1,0.625
+TOP10-gain_ratio-RF estimators: 80,314,1,1,0.575
+TOP10-gain_ratio-RF estimators: 80,333,0,0,0.5
+TOP10-gain_ratio-RF estimators: 80,363,1,1,0.5875
+TOP10-gain_ratio-RF estimators: 80,395,1,1,0.6375
+TOP10-chi2-SVM (Poly),72,1,1,0.725197713865992
+TOP10-chi2-SVM (Poly),252,1,1,0.7313689787963522
+TOP10-chi2-SVM (Poly),329,0,1,0.6643717998369204
+TOP10-chi2-SVM (Poly),215,0,0,0.3315926485972374
+TOP10-chi2-SVM (Poly),328,0,0,0.3368958598150105
+TOP10-chi2-SVM (Poly),111,1,1,0.5287687099254131
+TOP10-chi2-SVM (Poly),36,0,0,0.36502502843400997
+TOP10-chi2-SVM (Poly),132,0,1,0.7991619335844196
+TOP10-chi2-SVM (Poly),387,0,0,0.2414440482389176
+TOP10-chi2-SVM (Poly),317,1,1,0.7702435558580436
+TOP10-chi2-SVM (Poly),207,0,0,0.36968418873028347
+TOP10-chi2-SVM (Poly),342,0,1,0.5774950280922874
+TOP10-chi2-SVM (Poly),388,0,0,0.41659682071581816
+TOP10-chi2-SVM (Poly),144,0,1,0.7612390220955946
+TOP10-chi2-SVM (Poly),353,0,1,0.5747378976322647
+TOP10-chi2-SVM (Poly),197,0,0,0.35388360829058896
+TOP10-chi2-SVM (Poly),321,1,1,0.7217187944636273
+TOP10-chi2-SVM (Poly),325,0,1,0.5
+TOP10-chi2-SVM (Poly),379,0,1,0.6377587089667488
+TOP10-chi2-SVM (Poly),227,1,1,0.8116997387452353
+TOP10-chi2-SVM (Poly),179,0,1,0.6823670552962215
+TOP10-chi2-SVM (Poly),287,0,0,0.36351792119757104
+TOP10-chi2-SVM (Poly),236,0,0,0.24060285444808244
+TOP10-chi2-SVM (Poly),351,0,1,0.8064603639082316
+TOP10-chi2-SVM (Poly),245,0,1,0.808699182897298
+TOP10-chi2-SVM (Poly),56,1,0,0.33894060086630795
+TOP10-chi2-SVM (Poly),314,1,0,0.05281965067383597
+TOP10-chi2-SVM (Poly),333,0,1,0.6346938902891928
+TOP10-chi2-SVM (Poly),363,1,1,0.592148810843186
+TOP10-chi2-SVM (Poly),395,1,0,0.2802451413800859
+TOP10-mi-RF estimators: 100,72,1,1,0.64
+TOP10-mi-RF estimators: 100,252,1,1,0.66
+TOP10-mi-RF estimators: 100,329,0,1,0.53
+TOP10-mi-RF estimators: 100,215,0,1,0.52
+TOP10-mi-RF estimators: 100,328,0,0,0.26
+TOP10-mi-RF estimators: 100,111,1,1,0.8
+TOP10-mi-RF estimators: 100,36,0,0,0.29
+TOP10-mi-RF estimators: 100,132,0,0,0.38
+TOP10-mi-RF estimators: 100,387,0,0,0.24
+TOP10-mi-RF estimators: 100,317,1,1,0.52
+TOP10-mi-RF estimators: 100,207,0,0,0.2
+TOP10-mi-RF estimators: 100,342,0,0,0.32
+TOP10-mi-RF estimators: 100,388,0,1,0.66
+TOP10-mi-RF estimators: 100,144,0,1,0.56
+TOP10-mi-RF estimators: 100,353,0,1,0.58
+TOP10-mi-RF estimators: 100,197,0,0,0.12
+TOP10-mi-RF estimators: 100,321,1,1,0.83
+TOP10-mi-RF estimators: 100,325,0,0,0.23
+TOP10-mi-RF estimators: 100,379,0,0,0.43
+TOP10-mi-RF estimators: 100,227,1,1,0.68
+TOP10-mi-RF estimators: 100,179,0,1,0.69
+TOP10-mi-RF estimators: 100,287,0,0,0.06
+TOP10-mi-RF estimators: 100,236,0,0,0.41
+TOP10-mi-RF estimators: 100,351,0,1,0.63
+TOP10-mi-RF estimators: 100,245,0,1,0.89
+TOP10-mi-RF estimators: 100,56,1,1,0.79
+TOP10-mi-RF estimators: 100,314,1,0,0.27
+TOP10-mi-RF estimators: 100,333,0,0,0.38
+TOP10-mi-RF estimators: 100,363,1,0,0.45
+TOP10-mi-RF estimators: 100,395,1,1,0.71
+TOP10-relieff-Knn k = 5,72,1,1,1.0
+TOP10-relieff-Knn k = 5,252,1,1,0.8
+TOP10-relieff-Knn k = 5,329,0,0,0.4
+TOP10-relieff-Knn k = 5,215,0,1,0.6
+TOP10-relieff-Knn k = 5,328,0,0,0.2
+TOP10-relieff-Knn k = 5,111,1,1,0.6
+TOP10-relieff-Knn k = 5,36,0,1,0.6
+TOP10-relieff-Knn k = 5,132,0,1,0.6
+TOP10-relieff-Knn k = 5,387,0,1,0.6
+TOP10-relieff-Knn k = 5,317,1,1,0.6
+TOP10-relieff-Knn k = 5,207,0,0,0.2
+TOP10-relieff-Knn k = 5,342,0,0,0.4
+TOP10-relieff-Knn k = 5,388,0,0,0.4
+TOP10-relieff-Knn k = 5,144,0,0,0.4
+TOP10-relieff-Knn k = 5,353,0,1,1.0
+TOP10-relieff-Knn k = 5,197,0,0,0.0
+TOP10-relieff-Knn k = 5,321,1,1,1.0
+TOP10-relieff-Knn k = 5,325,0,0,0.4
+TOP10-relieff-Knn k = 5,379,0,1,0.8
+TOP10-relieff-Knn k = 5,227,1,1,1.0
+TOP10-relieff-Knn k = 5,179,0,1,0.8
+TOP10-relieff-Knn k = 5,287,0,0,0.2
+TOP10-relieff-Knn k = 5,236,0,0,0.4
+TOP10-relieff-Knn k = 5,351,0,1,0.8
+TOP10-relieff-Knn k = 5,245,0,1,0.8
+TOP10-relieff-Knn k = 5,56,1,1,1.0
+TOP10-relieff-Knn k = 5,314,1,1,0.8
+TOP10-relieff-Knn k = 5,333,0,0,0.4
+TOP10-relieff-Knn k = 5,363,1,0,0.2
+TOP10-relieff-Knn k = 5,395,1,1,0.8

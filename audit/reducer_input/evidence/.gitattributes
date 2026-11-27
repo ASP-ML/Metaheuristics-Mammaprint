@@ -1,0 +1,3 @@
+# Keep these copies byte-identical to the originals, so they match the SHA-256 checksums in ../README.md.
+# The repository's root .gitattributes converts line endings (text=auto eol=lf); most of these files use CRLF.
+* -text
